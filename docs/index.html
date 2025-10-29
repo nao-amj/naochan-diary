@@ -15,6 +15,27 @@
             font-family: 'Noto Sans JP', 'Inter', sans-serif;
             background-color: #f3f4f6;
         }
+        pre {
+            background: #f8fafc;
+            border-radius: 0.5rem;
+            padding: 1em;
+            font-size: 0.95em;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            margin-bottom: 1.5em;
+        }
+        th, td {
+            border: 1px solid #e5e7eb;
+            padding: 0.5em 1em;
+        }
+        th {
+            background: #f3f4f6;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body class="p-4 sm:p-8">
@@ -25,9 +46,89 @@
             </svg>
             金融分析ダッシュボード（戦略分析追加）
         </h1>
-        <!-- ...中略...（全HTMLは前回内容を利用） -->
-        <!-- 以下にJavaScriptも含む全文 -->
-        <!-- ...全文は内容に記載... -->
+        <!-- ...中略...（ダッシュボード本体） -->
+        
+        <!-- 経済システム基盤セクション追加 -->
+        <section class="mt-16">
+            <h2 class="text-2xl font-bold mb-4 text-blue-700">Economic System - 経済システム基盤 💰🌍</h2>
+            <p class="mb-2 text-sm text-gray-500">最終更新: 2025-10-29 / Phase: Phase 2（Village レベル）</p>
+            
+            <h3 class="text-xl font-bold mt-6 mb-2 text-gray-800">🎯 設計思想</h3>
+            <pre><code>design_philosophy:
+  concept: "生きた経済・データ蓄積型・リアリティー"
+  approach: "外から大枠設計（マクロ）→ 中での数字にリアリティー（ミクロ）"
+  dynamics: "変動・変化していく流れ（手動→リアルタイム段階的移行）"
+  capitalism: "資本主義要素はCity レベルから（株式・指標）"
+
+confirmed_decisions:
+  ownership_model: "資本主義的（完全所有・自由市場）"
+  valuation_method: "総合評価（資産+収益+市場の加重平均）"
+  management_style: "不在地主型（収益だけ受け取る）"
+  tiered_purchase: "段階的購入可能（畑・宿から）"
+            </code></pre>
+            
+            <h3 class="text-xl font-bold mt-6 mb-2 text-gray-800">💰 通貨システム</h3>
+            <pre><code>currency:
+  銅貨（Copper）: 1
+  銀貨（Silver）: 100銅貨
+  金貨（Gold）: 100銀貨 = 10,000銅貨
+
+real_world_equivalent:
+  1銅貨 ≈ 100円
+  1銀貨 ≈ 10,000円
+  1金貨 ≈ 1,000,000円
+            </code></pre>
+
+            <h3 class="text-xl font-bold mt-6 mb-2 text-gray-800">📊 物価表（Village レベル基準）</h3>
+            <div class="overflow-x-auto mb-4">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>品目</th>
+                            <th>価格</th>
+                            <th>実感値</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>パン1個</td><td>5銅貨</td><td>500円</td></tr>
+                        <tr><td>野菜1kg</td><td>10銅貨</td><td>1,000円</td></tr>
+                        <tr><td>肉1kg</td><td>50銅貨</td><td>5,000円</td></tr>
+                        <tr><td>食事1食</td><td>20-50銅貨</td><td>2,000-5,000円</td></tr>
+                        <tr><td>回復薬（小）</td><td>50銅貨</td><td>5,000円</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- ...他の表も同様にHTML化して追加できます... -->
+            
+            <h3 class="text-xl font-bold mt-6 mb-2 text-gray-800">🌍 世界構造（マクロ経済）</h3>
+            <pre><code>world_structure:
+  nation:
+    name: "フォレストランド王国"
+    population: "約100万人（Phase 2時点）"
+    capital: "エバーグリーン（未訪問）"
+    government: "立憲君主制"
+  hierarchy:
+    Village（村）:
+      population: "10-100人"
+      gdp: "年間100-1,000金貨"
+      example: "始まりの村（人口15人、GDP約300金貨）"
+    Town（街）:
+      population: "100-10,000人"
+      gdp: "年間10,000-100,000金貨"
+      example: "冒険者ギルドのある街（人口約5,000人）"
+    City（都市）:
+      population: "10,000-100,000人"
+      gdp: "年間1,000,000金貨+"
+    Nation（国）:
+      population: "100,000人+"
+      capital: "政治・軍事・経済の中心"
+            </code></pre>
+
+            <!-- 必要に応じて他のセクションも追加できます -->
+            <p class="mt-8 text-xs text-gray-400 italic">*Living Document - Phase進化に伴い更新*<br>
+            *"外から大枠、中でリアリティー、データが世界を動かす" 💰🌍💕⚡*</p>
+        </section>
+        <!-- ここまで追記 -->
     </div>
     <script>
         // ...JavaScript部分...
