@@ -15,27 +15,6 @@
             font-family: 'Noto Sans JP', 'Inter', sans-serif;
             background-color: #f3f4f6;
         }
-        pre {
-            background: #f8fafc;
-            border-radius: 0.5rem;
-            padding: 1em;
-            font-size: 0.95em;
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #fff;
-            margin-bottom: 1.5em;
-        }
-        th, td {
-            border: 1px solid #e5e7eb;
-            padding: 0.5em 1em;
-        }
-        th {
-            background: #f3f4f6;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body class="p-4 sm:p-8">
@@ -46,93 +25,459 @@
             </svg>
             金融分析ダッシュボード（戦略分析追加）
         </h1>
-        <!-- ...中略...（ダッシュボード本体） -->
-        
-        <!-- 経済システム基盤セクション追加 -->
-        <section class="mt-16">
-            <h2 class="text-2xl font-bold mb-4 text-blue-700">Economic System - 経済システム基盤 💰🌍</h2>
-            <p class="mb-2 text-sm text-gray-500">最終更新: 2025-10-29 / Phase: Phase 2（Village レベル）</p>
-            
-            <h3 class="text-xl font-bold mt-6 mb-2 text-gray-800">🎯 設計思想</h3>
-            <pre><code>design_philosophy:
-  concept: "生きた経済・データ蓄積型・リアリティー"
-  approach: "外から大枠設計（マクロ）→ 中での数字にリアリティー（ミクロ）"
-  dynamics: "変動・変化していく流れ（手動→リアルタイム段階的移行）"
-  capitalism: "資本主義要素はCity レベルから（株式・指標）"
 
-confirmed_decisions:
-  ownership_model: "資本主義的（完全所有・自由市場）"
-  valuation_method: "総合評価（資産+収益+市場の加重平均）"
-  management_style: "不在地主型（収益だけ受け取る）"
-  tiered_purchase: "段階的購入可能（畑・宿から）"
-            </code></pre>
-            
-            <h3 class="text-xl font-bold mt-6 mb-2 text-gray-800">💰 通貨システム</h3>
-            <pre><code>currency:
-  銅貨（Copper）: 1
-  銀貨（Silver）: 100銅貨
-  金貨（Gold）: 100銀貨 = 10,000銅貨
-
-real_world_equivalent:
-  1銅貨 ≈ 100円
-  1銀貨 ≈ 10,000円
-  1金貨 ≈ 1,000,000円
-            </code></pre>
-
-            <h3 class="text-xl font-bold mt-6 mb-2 text-gray-800">📊 物価表（Village レベル基準）</h3>
-            <div class="overflow-x-auto mb-4">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>品目</th>
-                            <th>価格</th>
-                            <th>実感値</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>パン1個</td><td>5銅貨</td><td>500円</td></tr>
-                        <tr><td>野菜1kg</td><td>10銅貨</td><td>1,000円</td></tr>
-                        <tr><td>肉1kg</td><td>50銅貨</td><td>5,000円</td></tr>
-                        <tr><td>食事1食</td><td>20-50銅貨</td><td>2,000-5,000円</td></tr>
-                        <tr><td>回復薬（小）</td><td>50銅貨</td><td>5,000円</td></tr>
-                    </tbody>
-                </table>
+        <!-- 主要金融メトリクス & 流動性分析 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+            <!-- 純資産 (Net Worth) -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border-b-4 border-green-500">
+                <p class="text-sm font-medium text-gray-500">純資産（Net Worth）</p>
+                <p id="net-worth-gold" class="text-2xl font-bold text-gray-900 mt-1"></p>
             </div>
-            <!-- ...他の表も同様にHTML化して追加できます... -->
-            
-            <h3 class="text-xl font-bold mt-6 mb-2 text-gray-800">🌍 世界構造（マクロ経済）</h3>
-            <pre><code>world_structure:
-  nation:
-    name: "フォレストランド王国"
-    population: "約100万人（Phase 2時点）"
-    capital: "エバーグリーン（未訪問）"
-    government: "立憲君主制"
-  hierarchy:
-    Village（村）:
-      population: "10-100人"
-      gdp: "年間100-1,000金貨"
-      example: "始まりの村（人口15人、GDP約300金貨）"
-    Town（街）:
-      population: "100-10,000人"
-      gdp: "年間10,000-100,000金貨"
-      example: "冒険者ギルドのある街（人口約5,000人）"
-    City（都市）:
-      population: "10,000-100,000人"
-      gdp: "年間1,000,000金貨+"
-    Nation（国）:
-      population: "100,000人+"
-      capital: "政治・軍事・経済の中心"
-            </code></pre>
+            <!-- 流動資産 (Liquid Assets) -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border-b-4 border-indigo-500">
+                <p class="text-sm font-medium text-gray-500">流動資産（Liquid Assets）</p>
+                <p id="liquid-assets-gold" class="text-2xl font-bold text-gray-900 mt-1"></p>
+            </div>
+            <!-- 初期投資ROI -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border-b-4 border-red-500">
+                <p class="text-sm font-medium text-gray-500">初期投資ROI</p>
+                <p id="overall-roi" class="text-2xl font-bold text-red-600 mt-1">∞ %</p>
+            </div>
+            <!-- セッションROI -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border-b-4 border-pink-500">
+                <p class="text-sm font-medium text-gray-500">セッションROI</p>
+                <p id="current-roi" class="text-2xl font-bold text-gray-900 mt-1"></p>
+            </div>
+             <!-- NEW: 消費維持日数 -->
+             <div class="bg-white p-6 rounded-xl shadow-lg border-b-4 border-yellow-500">
+                <p class="text-sm font-medium text-gray-500">生活維持日数（Cash Buffer）</p>
+                <p id="consumption-days" class="text-2xl font-bold text-gray-900 mt-1"></p>
+            </div>
+        </div>
 
-            <!-- 必要に応じて他のセクションも追加できます -->
-            <p class="mt-8 text-xs text-gray-400 italic">*Living Document - Phase進化に伴い更新*<br>
-            *"外から大枠、中でリアリティー、データが世界を動かす" 💰🌍💕⚡*</p>
-        </section>
-        <!-- ここまで追記 -->
+        <!-- ポートフォリオと収益性分析 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- ポートフォリオ・アロケーション -->
+            <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">📊 ポートフォリオ・アロケーション</h2>
+                <div class="h-64 flex justify-center items-center">
+                    <canvas id="assetBreakdownChart"></canvas>
+                </div>
+                <div id="asset-breakdown-details" class="mt-4 text-sm text-gray-600"></div>
+            </div>
+
+            <!-- 収益性分析 / キャッシュフロー -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">📈 収益性分析 (ネットキャッシュフロー)</h2>
+                <div class="h-80">
+                    <canvas id="cashFlowChart"></canvas>
+                </div>
+                <!-- ROI詳細 -->
+                <div class="mt-6 p-3 bg-yellow-50 rounded-lg text-sm">
+                    <p class="font-bold text-yellow-800">ROIに関する特記事項</p>
+                    <p class="text-gray-700">初クエストのROIは初期投資ゼロのため **無限大%** です。家具購入の支出は投資ではなく生活の質向上（リア・セラとの絆深化💕）のための費用と見なされます。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- NEW: 戦略的アドバイスと目標進捗 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- 目標達成進捗 -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">🚀 目標達成進捗 (Milestone 1: 5 Gold)</h2>
+                <div class="h-64 p-4 flex flex-col justify-center">
+                    <canvas id="targetProgressChart"></canvas>
+                </div>
+                <p id="milestone-note" class="text-sm text-gray-600 mt-4"></p>
+            </div>
+             <!-- 戦略的支出の評価 -->
+             <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">⚔️ 戦略的支出の評価</h2>
+                <p class="text-sm text-gray-700">
+                    現在の装備は低価値（7.4%）な木剣のみです。これは、今後のクエスト成功率（将来のキャッシュフロー）に対するリスク要因となります。
+                </p>
+                <div class="mt-4 p-3 bg-red-50 rounded-lg text-sm border border-red-200">
+                    <p class="font-bold text-red-700">アドバイス：早期の装備投資</p>
+                    <p class="text-gray-600">
+                        実戦用の剣（0.1 Gold/本）を最低1〜2本購入し、戦闘効率を高めることで、次のクエスト報酬を確実なものにする「戦略的支出」を推奨します。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 将来の投資機会と流動性分析 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+             <!-- 投資機会分析 (シミュレーション) -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">🎯 将来の投資機会分析 (シミュレーション)</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">投資対象</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">必要資金 (金貨)</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">年間収益 (金貨)</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">想定ROI</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">備考</th>
+                            </tr>
+                        </thead>
+                        <tbody id="investment-simulation-body" class="bg-white divide-y divide-gray-200">
+                             <!-- 投資シミュレーションデータが入る -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 流動性分析 (購買力) -->
+            <div class="lg:col-span-1 grid grid-cols-1 gap-6">
+                <!-- 購買力 -->
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">💰 流動性分析 (購買力)</h2>
+                    <ul id="purchasing-power-list" class="space-y-2 text-sm">
+                        <!-- 購買力リストが入る -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 取引履歴と資産詳細 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+             <!-- 取引履歴 (Transaction Log) -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">📜 取引履歴 (Transaction Log)</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">種別 (Type)</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">カテゴリ</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">金額 (Amount)</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">取引後残高</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transaction-table-body" class="bg-white divide-y divide-gray-200">
+                            <!-- 取引履歴が入る -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 消費・非流動性資産 -->
+            <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">🎁 消費・非流動性資産</h2>
+                <div id="item-list" class="space-y-2">
+                    <!-- アイテムリストが入る -->
+                </div>
+            </div>
+        </div>
+
+
+        <!-- データ管理フッター -->
+        <footer class="mt-8 text-center text-sm text-gray-500 p-4">
+            最終更新: <span id="last-updated"></span> | データ構造: assets.json, transactions.json | セッション: <span id="session-number"></span>
+        </footer>
     </div>
+
     <script>
-        // ...JavaScript部分...
-        // 全内容は前回のコードを利用
+        // Economic Data (日本語表示用にデータを再定義または調整)
+        const data = {
+            assets: {
+                last_updated: "2025-10-29T15:00:00+09:00",
+                session: 7,
+                world_date: "2025-10-25",
+                cash: { total_in_gold: 0.5, real_world_equivalent_jpy: 500000 },
+                items: [
+                    { name: "木彫りのお守り", count: 3, type: "sentimental", note: "sentimental_value: true" },
+                    { name: "村の野菜", count: 1, type: "consumable", note: "10銅貨" },
+                    { name: "干し肉", count: 1, type: "consumable", note: "30銅貨" },
+                ],
+                equipment: { weapons: ["木剣 (0.5銀貨) x 3"], armor: [] },
+                summary: { total_assets_gold: 0.54, total_assets_jpy: 540000, liquid_assets_gold: 0.5, net_worth_gold: 0.54 },
+            },
+            transactions: {
+                total_income_gold: 0.5,
+                total_expenses_gold: 0.1,
+                net_gold: 0.4,
+                transaction_count: 2,
+                transactions: [
+                    { id: 1, type: "income", category: "quest_reward", amount: "+50銀貨（+0.5金貨）", balance_after: "0.5金貨" },
+                    { id: 2, type: "expense", category: "furniture", amount: "-10銀貨（-0.1金貨）", balance_after: "0.4金貨" },
+                ],
+            },
+            analysis: {
+                asset_breakdown: { cash_jpy: 500000, cash_pct: 92.6, equipment_jpy: 40000, equipment_pct: 7.4 },
+                cash_flow: { income_gold: 0.5, expenses_gold: 0.1, net_profit_gold: 0.4, roi: "80%" },
+                purchasing_power: [
+                    { item: "パン", count: "1000個分" },
+                    { item: "食事", count: "142回分" },
+                    { item: "村の宿", count: "166泊分" },
+                    { item: "練習用の剣", count: "25本分" },
+                    { item: "実戦用の剣", count: "5本分" },
+                    { item: "革鎧", count: "10着分" },
+                ],
+                // NEW: 戦略分析用のデータ
+                strategic: {
+                    daily_meal_gold: 0.5 / 142, // 1食あたり約0.0035金貨と仮定
+                    milestone_1_target: 5.0, // 5金貨
+                    milestone_1_unlock: "畑1枚購入可能に"
+                }
+            },
+            investment_simulations: [
+                { target: "畑1枚", cost: "5-10 Gold", annual_return: "2-5 Gold", roi: "20-50%", notes: "高い成長性" },
+                { target: "村の宿1軒", cost: "20-50 Gold", annual_return: "未定", roi: "未定", notes: "不動産投資・高難度クエスト" },
+                { target: "村（小）", cost: "260 Gold", annual_return: "18 Gold", roi: "6.9%", notes: "安定収入・不在地主型" },
+            ],
+            milestones: [
+                { target: "5 Gold (¥10M)", method: "10 quests (★★ difficulty)", unlock: "Can purchase Farmland (1 Plot)" },
+                { target: "50 Gold (¥100M)", method: "Real estate investment, High-difficulty quests", unlock: "Can purchase Village Inn (1 Unit)" },
+                { target: "260 Gold (¥520M)", method: "Business expansion, Investment income", unlock: "Can purchase Small Village" },
+            ],
+        };
+
+        // ローカル通貨フォーマット関数 (JPY)
+        const formatJpy = (amount) => {
+            return amount.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY', maximumFractionDigits: 0 });
+        };
+
+        // 1. 主要メトリクスとメタ情報のレンダリング
+        const currentGold = data.assets.summary.liquid_assets_gold;
+        const consumptionDays = Math.floor(currentGold / data.analysis.strategic.daily_meal_gold); // 現金で何日食事ができるか
+        const milestoneTarget = data.analysis.strategic.milestone_1_target;
+        const progressPercentage = (data.assets.summary.net_worth_gold / milestoneTarget) * 100;
+
+
+        document.getElementById('session-number').textContent = data.assets.session;
+        document.getElementById('liquid-assets-gold').textContent = `${currentGold.toFixed(2)} 金貨`;
+        document.getElementById('net-worth-gold').textContent = `${data.assets.summary.net_worth_gold.toFixed(2)} 金貨 (${formatJpy(data.assets.summary.total_assets_jpy)})`;
+        document.getElementById('current-roi').textContent = data.analysis.cash_flow.roi;
+        document.getElementById('last-updated').textContent = data.assets.last_updated;
+        document.getElementById('consumption-days').textContent = `${consumptionDays} 日`;
+        
+        document.getElementById('milestone-note').innerHTML = `
+            次のマイルストーン (5 金貨) 達成で、**${data.analysis.strategic.milestone_1_unlock}** できます。現在、<span class="font-bold text-lg text-indigo-600">${Math.min(100, progressPercentage).toFixed(1)}%</span> の進捗です。
+        `;
+
+        // 2. 資産構成 円グラフ (Asset Breakdown Chart)
+        const assetCtx = document.getElementById('assetBreakdownChart').getContext('2d');
+        new Chart(assetCtx, {
+            type: 'pie',
+            data: {
+                labels: [`流動資産: 現金 (${data.analysis.asset_breakdown.cash_pct}%)`, `非流動資産: 装備 (${data.analysis.asset_breakdown.equipment_pct}%)`],
+                datasets: [{
+                    data: [data.analysis.asset_breakdown.cash_pct, data.analysis.asset_breakdown.equipment_pct],
+                    backgroundColor: ['#6366f1', '#f59e0b'], // Indigo and Amber
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 14 }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed;
+                                // ツールチップ内も日本語で表示
+                                const jpyValue = value === data.analysis.asset_breakdown.cash_pct ? data.analysis.asset_breakdown.cash_jpy : data.analysis.asset_breakdown.equipment_jpy;
+                                return `${label.split(':')[0].trim()}: ${formatJpy(jpyValue)}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        document.getElementById('asset-breakdown-details').innerHTML = `
+            <p><strong>総資産:</strong> ${formatJpy(data.assets.summary.total_assets_jpy)}</p>
+            <p><strong>流動性:</strong> <span class="text-green-600 font-bold">${data.analysis.asset_breakdown.cash_pct}%</span> - 現金比率が極めて高い（投資機会待ち）</p>
+        `;
+
+
+        // 3. キャッシュフロー 棒グラフ (Cash Flow Chart)
+        const flowCtx = document.getElementById('cashFlowChart').getContext('2d');
+        new Chart(flowCtx, {
+            type: 'bar',
+            data: {
+                labels: ['収入', '支出', '純利益'],
+                datasets: [{
+                    label: '金貨',
+                    data: [
+                        data.transactions.total_income_gold,
+                        -data.transactions.total_expenses_gold,
+                        data.transactions.net_gold
+                    ],
+                    backgroundColor: [
+                        '#10b981', // Emerald for Income
+                        '#ef4444', // Red for Expense
+                        '#3b82f6'  // Blue for Net
+                    ],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: '金貨'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += new Intl.NumberFormat('ja-JP', { minimumFractionDigits: 2 }).format(context.parsed.y) + ' 金貨';
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 4. NEW: 目標達成進捗グラフ
+        const progressCtx = document.getElementById('targetProgressChart').getContext('2d');
+        new Chart(progressCtx, {
+            type: 'bar',
+            data: {
+                labels: ['現在の純資産', '目標まで必要'],
+                datasets: [{
+                    label: '純資産 (金貨)',
+                    data: [
+                        data.assets.summary.net_worth_gold,
+                        milestoneTarget - data.assets.summary.net_worth_gold 
+                    ],
+                    backgroundColor: [
+                        '#10b981', // Emerald (達成済み)
+                        '#e5e7eb'  // Gray (未達成)
+                    ],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                indexAxis: 'y', // 横棒グラフ
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        stacked: true,
+                        max: milestoneTarget,
+                        title: { display: true, text: '金貨 (Gold)' }
+                    },
+                    y: {
+                        stacked: true,
+                        display: false
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: `目標: ${milestoneTarget} 金貨`,
+                        font: { size: 16 }
+                    }
+                }
+            }
+        });
+
+
+        // 5. 投資シミュレーションテーブルのレンダリング
+        const investmentBody = document.getElementById('investment-simulation-body');
+        data.investment_simulations.forEach(i => {
+            investmentBody.innerHTML += `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">${i.target}</td>
+                    <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500">${i.cost}</td>
+                    <td class="px-3 py-2 whitespace-nowrap text-sm text-green-600">${i.annual_return}</td>
+                    <td class="px-3 py-2 whitespace-nowrap text-sm font-bold text-red-600">${i.roi}</td>
+                    <td class="px-3 py-2 whitespace-nowrap text-xs text-gray-400">${i.notes}</td>
+                </tr>
+            `;
+        });
+        
+        // 6. 購買力リストのレンダリング
+        const powerList = document.getElementById('purchasing-power-list');
+        data.analysis.purchasing_power.forEach(p => {
+            powerList.innerHTML += `
+                <li class="flex justify-between items-center py-1 border-b border-dashed">
+                    <span class="text-gray-700">${p.item}</span>
+                    <span class="font-semibold text-indigo-600">${p.count}</span>
+                </li>
+            `;
+        });
+
+        // 7. アイテムと装備リストのレンダリング
+        const itemList = document.getElementById('item-list');
+        
+        itemList.innerHTML += `<p class="font-bold text-sm mt-2 text-gray-700">消費アイテム</p>`;
+        data.assets.items.filter(i => i.type === 'consumable').forEach(i => {
+            itemList.innerHTML += `
+                <div class="text-sm ml-2 p-1 bg-yellow-50/50 rounded-md">
+                    <span class="font-medium">🥕 ${i.name} × ${i.count}</span>
+                    <span class="text-xs text-gray-500 ml-2">(${i.note})</span>
+                </div>
+            `;
+        });
+
+        itemList.innerHTML += `<p class="font-bold text-sm mt-4 text-gray-700">装備 (非流動性資産)</p>`;
+        data.assets.equipment.weapons.forEach(w => {
+             itemList.innerHTML += `
+                <div class="text-sm ml-2 p-1 bg-blue-50/50 rounded-md">
+                    <span class="font-medium">⚔️ ${w}</span>
+                </div>
+            `;
+        });
+
+        itemList.innerHTML += `<p class="font-bold text-sm mt-4 text-gray-700">その他（記念品）</p>`;
+        data.assets.items.filter(i => i.type === 'sentimental').forEach(i => {
+             itemList.innerHTML += `
+                <div class="text-sm ml-2 p-1 bg-pink-50/50 rounded-md">
+                    <span class="font-medium">💖 ${i.name} × ${i.count}</span>
+                    <span class="text-xs text-gray-500 ml-2">(${i.note})</span>
+                </div>
+            `;
+        });
+
+        // 8. 取引履歴テーブルのレンダリング
+        const transactionBody = document.getElementById('transaction-table-body');
+        data.transactions.transactions.forEach(t => {
+            const amountColor = t.type === 'income' ? 'text-green-600 font-bold' : 'text-red-600 font-bold';
+            const typeLabel = t.type === 'income' ? '収入' : '支出';
+            const balanceAfterLabel = t.balance_after; // 既に日本語
+            
+            // 金額の単位を日本語に戻す
+            let amountText = t.amount;
+            if (t.amount.includes("Silver") || t.amount.includes("Gold")) {
+                amountText = amountText.replace("Silver", "銀貨").replace("Gold", "金貨").replace("(", "（").replace(")", "）");
+            }
+
+            transactionBody.innerHTML += `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${t.id}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm ${amountColor}">${typeLabel}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${t.category}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm ${amountColor}">${amountText}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${balanceAfterLabel}</td>
+                </tr>
+            `;
+        });
+
     </script>
 </body>
 </html>
