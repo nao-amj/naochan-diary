@@ -1,21 +1,53 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page.title }} | 所有権の大地</title>
     <style>
+        /* Theme variables */
         :root {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d2d2d;
-            --bg-code: #0d0d0d;
-            --text-primary: #e5e5e5;
-            --text-secondary: #a0a0a0;
-            --accent: #f97316;
-            --accent-dim: rgba(249, 115, 22, 0.15);
-            --border: #404040;
-            --success: #22c55e;
-            --info: #3b82f6;
+            /* Dark theme (Claude Code style) */
+            --dark-bg-primary: #1a1a1a;
+            --dark-bg-secondary: #2d2d2d;
+            --dark-bg-code: #0d0d0d;
+            --dark-text-primary: #e5e5e5;
+            --dark-text-secondary: #a0a0a0;
+            --dark-accent: #f97316;
+            --dark-accent-dim: rgba(249, 115, 22, 0.15);
+            --dark-border: #404040;
+
+            /* Light theme (Classic style) */
+            --light-bg-primary: #ffffff;
+            --light-bg-secondary: #f8f9fa;
+            --light-bg-code: #f1f3f4;
+            --light-text-primary: #24292e;
+            --light-text-secondary: #586069;
+            --light-accent: #d73a49;
+            --light-accent-dim: rgba(215, 58, 73, 0.1);
+            --light-border: #e1e4e8;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: var(--dark-bg-primary);
+            --bg-secondary: var(--dark-bg-secondary);
+            --bg-code: var(--dark-bg-code);
+            --text-primary: var(--dark-text-primary);
+            --text-secondary: var(--dark-text-secondary);
+            --accent: var(--dark-accent);
+            --accent-dim: var(--dark-accent-dim);
+            --border: var(--dark-border);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: var(--light-bg-primary);
+            --bg-secondary: var(--light-bg-secondary);
+            --bg-code: var(--light-bg-code);
+            --text-primary: var(--light-text-primary);
+            --text-secondary: var(--light-text-secondary);
+            --accent: var(--light-accent);
+            --accent-dim: var(--light-accent-dim);
+            --border: var(--light-border);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,6 +59,7 @@
             color: var(--text-primary);
             line-height: 1.7;
             font-size: 14px;
+            transition: background 0.3s, color 0.3s;
         }
 
         .container {
@@ -61,6 +94,32 @@
 
         .nav-current {
             color: var(--text-secondary);
+            flex: 1;
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.4rem 0.6rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .theme-icon {
+            font-size: 1rem;
         }
 
         /* Content styling */
@@ -220,6 +279,7 @@
         @media (max-width: 600px) {
             body { font-size: 13px; }
             .container { padding: 1rem; }
+            .theme-toggle span:not(.theme-icon) { display: none; }
         }
     </style>
 </head>
@@ -229,6 +289,10 @@
             <a href="/naochan-diary/rust-ownership-land/">所有権の大地</a>
             <span class="nav-separator">/</span>
             <span class="nav-current">{{ page.title }}</span>
+            <button class="theme-toggle" onclick="toggleTheme()" title="テーマ切り替え">
+                <span class="theme-icon" id="theme-icon">🌙</span>
+                <span id="theme-label">Dark</span>
+            </button>
         </nav>
 
         <main class="content">
@@ -239,5 +303,43 @@
             <a href="/naochan-diary/rust-ownership-land/">← 目次に戻る</a>
         </nav>
     </div>
+
+    <script>
+        function getTheme() {
+            return localStorage.getItem('rust-land-theme') || 'dark';
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('rust-land-theme', theme);
+            updateToggleButton(theme);
+        }
+
+        function updateToggleButton(theme) {
+            const icon = document.getElementById('theme-icon');
+            const label = document.getElementById('theme-label');
+            if (theme === 'dark') {
+                icon.textContent = '🌙';
+                label.textContent = 'Dark';
+            } else {
+                icon.textContent = '☀️';
+                label.textContent = 'Light';
+            }
+        }
+
+        function toggleTheme() {
+            const current = getTheme();
+            const next = current === 'dark' ? 'light' : 'dark';
+            setTheme(next);
+        }
+
+        // Initialize theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTheme(getTheme());
+        });
+
+        // Apply theme immediately to prevent flash
+        setTheme(getTheme());
+    </script>
 </body>
 </html>
