@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} | 所有権の大地</title>
+    <style>
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-code: #0d0d0d;
+            --text-primary: #e5e5e5;
+            --text-secondary: #a0a0a0;
+            --accent: #f97316;
+            --accent-dim: rgba(249, 115, 22, 0.15);
+            --border: #404040;
+            --success: #22c55e;
+            --info: #3b82f6;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+
+        .nav a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .nav a:hover {
+            text-decoration: underline;
+        }
+
+        .nav-separator {
+            color: var(--text-secondary);
+        }
+
+        .nav-current {
+            color: var(--text-secondary);
+        }
+
+        /* Content styling */
+        .content {
+            color: var(--text-primary);
+        }
+
+        .content h1 {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .content h2 {
+            font-size: 1.25rem;
+            color: var(--accent);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content h3 {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .content p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .content strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .content em {
+            color: var(--accent);
+            font-style: normal;
+        }
+
+        .content a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .content a:hover {
+            text-decoration: underline;
+        }
+
+        .content ul, .content ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .content li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Code blocks */
+        .content code {
+            font-family: inherit;
+            background: var(--bg-code);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--accent);
+        }
+
+        .content pre {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+        }
+
+        .content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        /* Blockquotes - for character dialogue */
+        .content blockquote {
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--accent);
+            margin: 1rem 0;
+            padding: 1rem 1.25rem;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .content blockquote p {
+            margin-bottom: 0;
+            color: var(--text-primary);
+        }
+
+        .content blockquote p:not(:last-child) {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Horizontal rule */
+        .content hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 2rem 0;
+        }
+
+        /* Tables */
+        .content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .content th, .content td {
+            border: 1px solid var(--border);
+            padding: 0.5rem 0.75rem;
+            text-align: left;
+        }
+
+        .content th {
+            background: var(--bg-secondary);
+            color: var(--accent);
+        }
+
+        .content td {
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .footer-nav {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+
+        .footer-nav a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .footer-nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body { font-size: 13px; }
+            .container { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav">
+            <a href="index.html">所有権の大地</a>
+            <span class="nav-separator">/</span>
+            <span class="nav-current">{{ page.title }}</span>
+        </nav>
+
+        <main class="content">
+            {{ content }}
+        </main>
+
+        <nav class="footer-nav">
+            <a href="index.html">← 目次に戻る</a>
+        </nav>
+    </div>
+</body>
+</html>
