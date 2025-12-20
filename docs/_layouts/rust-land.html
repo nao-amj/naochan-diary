@@ -4,10 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page.title }} | 所有権の大地</title>
+
+    <!-- Highlight.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" disabled>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/rust.min.js"></script>
+
     <style>
         /* Theme variables */
         :root {
-            /* Dark theme (Claude Code style) */
             --dark-bg-primary: #1a1a1a;
             --dark-bg-secondary: #2d2d2d;
             --dark-bg-code: #0d0d0d;
@@ -17,10 +23,9 @@
             --dark-accent-dim: rgba(249, 115, 22, 0.15);
             --dark-border: #404040;
 
-            /* Light theme (Classic style) */
             --light-bg-primary: #ffffff;
             --light-bg-secondary: #f8f9fa;
-            --light-bg-code: #f1f3f4;
+            --light-bg-code: #f6f8fa;
             --light-text-primary: #24292e;
             --light-text-secondary: #586069;
             --light-accent: #d73a49;
@@ -62,43 +67,175 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        .container {
-            max-width: 800px;
+        /* Layout */
+        .layout {
+            display: flex;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem 1.5rem;
         }
 
-        /* Navigation */
-        .nav {
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            padding: 1.5rem;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .sidebar-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-title {
+            font-size: 1rem;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .sidebar-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 0.4rem 0.75rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            transition: all 0.15s ease;
+        }
+
+        .sidebar-nav a:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .sidebar-nav a.active {
+            background: var(--accent-dim);
+            color: var(--accent);
+            border-left: 2px solid var(--accent);
+        }
+
+        /* TOC in sidebar */
+        .toc {
+            list-style: none;
+            font-size: 0.8rem;
+        }
+
+        .toc li {
+            margin-bottom: 0.25rem;
+        }
+
+        .toc a {
+            display: block;
+            padding: 0.3rem 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .toc a:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .toc a.active {
+            color: var(--accent);
+        }
+
+        /* Mobile sidebar toggle */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 48px;
+            height: 48px;
+            background: var(--accent);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        /* Main content */
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 2rem;
+        }
+
+        /* Top bar */
+        .topbar {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: space-between;
             margin-bottom: 2rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--border);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             font-size: 0.85rem;
         }
 
-        .nav a {
+        .breadcrumb a {
             color: var(--accent);
             text-decoration: none;
         }
 
-        .nav a:hover {
-            text-decoration: underline;
-        }
-
-        .nav-separator {
+        .breadcrumb-separator {
             color: var(--text-secondary);
         }
 
-        .nav-current {
+        .breadcrumb-current {
             color: var(--text-secondary);
-            flex: 1;
         }
 
-        /* Theme toggle */
-        .theme-toggle {
+        .topbar-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: 6px;
@@ -113,20 +250,12 @@
             gap: 0.4rem;
         }
 
-        .theme-toggle:hover {
+        .btn:hover {
             border-color: var(--accent);
             color: var(--accent);
         }
 
-        .theme-icon {
-            font-size: 1rem;
-        }
-
         /* Content styling */
-        .content {
-            color: var(--text-primary);
-        }
-
         .content h1 {
             font-size: 1.5rem;
             color: var(--accent);
@@ -138,8 +267,9 @@
         .content h2 {
             font-size: 1.25rem;
             color: var(--accent);
-            margin-top: 2rem;
+            margin-top: 2.5rem;
             margin-bottom: 1rem;
+            scroll-margin-top: 2rem;
         }
 
         .content h3 {
@@ -183,9 +313,9 @@
             margin-bottom: 0.5rem;
         }
 
-        /* Code blocks */
+        /* Code blocks with syntax highlighting */
         .content code {
-            font-family: inherit;
+            font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
             background: var(--bg-code);
             padding: 0.2rem 0.4rem;
             border-radius: 4px;
@@ -200,15 +330,30 @@
             padding: 1rem;
             margin-bottom: 1rem;
             overflow-x: auto;
+            position: relative;
         }
 
         .content pre code {
             background: none;
             padding: 0;
-            color: var(--text-primary);
+            color: inherit;
         }
 
-        /* Blockquotes - for character dialogue */
+        /* Code block language label */
+        .content pre::before {
+            content: attr(data-lang);
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+            border-radius: 0 6px 0 4px;
+            text-transform: uppercase;
+        }
+
+        /* Blockquotes */
         .content blockquote {
             background: var(--bg-secondary);
             border-left: 3px solid var(--accent);
@@ -226,14 +371,12 @@
             margin-bottom: 0.5rem;
         }
 
-        /* Horizontal rule */
         .content hr {
             border: none;
             border-top: 1px solid var(--border);
             margin: 2rem 0;
         }
 
-        /* Tables */
         .content table {
             width: 100%;
             border-collapse: collapse;
@@ -256,55 +399,233 @@
             color: var(--text-secondary);
         }
 
-        /* Footer */
-        .footer-nav {
+        /* Chapter navigation */
+        .chapter-nav {
+            display: flex;
+            justify-content: space-between;
             margin-top: 3rem;
             padding-top: 1.5rem;
             border-top: 1px solid var(--border);
+        }
+
+        .chapter-nav-item {
             display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-        }
-
-        .footer-nav a {
-            color: var(--accent);
+            flex-direction: column;
+            gap: 0.25rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
             text-decoration: none;
+            transition: all 0.2s;
+            max-width: 45%;
         }
 
-        .footer-nav a:hover {
-            text-decoration: underline;
+        .chapter-nav-item:hover {
+            border-color: var(--accent);
+        }
+
+        .chapter-nav-item.prev {
+            align-items: flex-start;
+        }
+
+        .chapter-nav-item.next {
+            align-items: flex-end;
+            margin-left: auto;
+        }
+
+        .chapter-nav-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .chapter-nav-title {
+            color: var(--accent);
+            font-size: 0.9rem;
         }
 
         /* Responsive */
-        @media (max-width: 600px) {
-            body { font-size: 13px; }
-            .container { padding: 1rem; }
-            .theme-toggle span:not(.theme-icon) { display: none; }
+        @media (max-width: 900px) {
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                transform: translateX(-100%);
+                z-index: 100;
+                background: var(--bg-primary);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .main {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Search modal */
+        .search-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 15vh;
+        }
+
+        .search-modal.open {
+            display: flex;
+        }
+
+        .search-box {
+            width: 90%;
+            max-width: 600px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            animation: slideDown 0.2s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-results {
+            border-top: 1px solid var(--border);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .search-result {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-result:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .search-result-title {
+            color: var(--accent);
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <nav class="nav">
-            <a href="/naochan-diary/rust-ownership-land/">所有権の大地</a>
-            <span class="nav-separator">/</span>
-            <span class="nav-current">{{ page.title }}</span>
-            <button class="theme-toggle" onclick="toggleTheme()" title="テーマ切り替え">
-                <span class="theme-icon" id="theme-icon">🌙</span>
-                <span id="theme-label">Dark</span>
-            </button>
-        </nav>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="/naochan-diary/rust-ownership-land/" style="text-decoration:none;">
+                    <div class="sidebar-title">所有権の大地</div>
+                </a>
+                <div class="sidebar-subtitle">Rust学習物語</div>
+            </div>
 
-        <main class="content">
-            {{ content }}
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Chapters</div>
+                <ul class="sidebar-nav" id="chapter-nav">
+                    <li><a href="/naochan-diary/rust-ownership-land/55_intro.html" data-chapter="55">01. 所有権の大地</a></li>
+                    <li><a href="/naochan-diary/rust-ownership-land/56_ownership.html" data-chapter="56">02. 内部可変性の迷宮</a></li>
+                    <li><a href="/naochan-diary/rust-ownership-land/58_borrowing.html" data-chapter="58">03. トレイトの大聖堂</a></li>
+                    <li><a href="/naochan-diary/rust-ownership-land/59_lifetime.html" data-chapter="59">04. ジェネリクスの鋳造所</a></li>
+                    <li><a href="/naochan-diary/rust-ownership-land/60_error_handling.html" data-chapter="60">05. エラーの峡谷</a></li>
+                    <li><a href="/naochan-diary/rust-ownership-land/61_async.html" data-chapter="61">06. 非同期の浮遊島</a></li>
+                    <li><a href="/naochan-diary/rust-ownership-land/62_macro.html" data-chapter="62">07. マクロの魔術塔</a></li>
+                    <li><a href="/naochan-diary/rust-ownership-land/63_module.html" data-chapter="63">08. クレートの港</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">On This Page</div>
+                <ul class="toc" id="toc"></ul>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="main">
+            <div class="topbar">
+                <div class="breadcrumb">
+                    <a href="/naochan-diary/rust-ownership-land/">目次</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-current">{{ page.title }}</span>
+                </div>
+                <div class="topbar-actions">
+                    <button class="btn" onclick="openSearch()" title="検索 (Ctrl+K)">
+                        <span>🔍</span>
+                        <span>検索</span>
+                    </button>
+                    <button class="btn" onclick="toggleTheme()" title="テーマ切り替え">
+                        <span class="theme-icon" id="theme-icon">🌙</span>
+                        <span id="theme-label">Dark</span>
+                    </button>
+                </div>
+            </div>
+
+            <article class="content" id="content">
+                {{ content }}
+            </article>
+
+            <nav class="chapter-nav" id="chapter-nav-bottom"></nav>
         </main>
+    </div>
 
-        <nav class="footer-nav">
-            <a href="/naochan-diary/rust-ownership-land/">← 目次に戻る</a>
-        </nav>
+    <!-- Mobile sidebar toggle -->
+    <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+
+    <!-- Search modal -->
+    <div class="search-modal" id="search-modal" onclick="closeSearch(event)">
+        <div class="search-box" onclick="event.stopPropagation()">
+            <input type="text" class="search-input" id="search-input" placeholder="検索..." oninput="handleSearch(this.value)">
+            <div class="search-results" id="search-results"></div>
+        </div>
     </div>
 
     <script>
+        // Chapter data for navigation
+        const chapters = [
+            { id: '55', file: '55_intro.html', title: '所有権の大地', num: '01' },
+            { id: '56', file: '56_ownership.html', title: '内部可変性の迷宮', num: '02' },
+            { id: '58', file: '58_borrowing.html', title: 'トレイトの大聖堂', num: '03' },
+            { id: '59', file: '59_lifetime.html', title: 'ジェネリクスの鋳造所', num: '04' },
+            { id: '60', file: '60_error_handling.html', title: 'エラーの峡谷', num: '05' },
+            { id: '61', file: '61_async.html', title: '非同期の浮遊島', num: '06' },
+            { id: '62', file: '62_macro.html', title: 'マクロの魔術塔', num: '07' },
+            { id: '63', file: '63_module.html', title: 'クレートの港', num: '08' }
+        ];
+
+        // Theme management
         function getTheme() {
             return localStorage.getItem('rust-land-theme') || 'dark';
         }
@@ -312,6 +633,11 @@
         function setTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('rust-land-theme', theme);
+
+            // Switch highlight.js theme
+            document.getElementById('hljs-dark').disabled = theme !== 'dark';
+            document.getElementById('hljs-light').disabled = theme !== 'light';
+
             updateToggleButton(theme);
         }
 
@@ -329,16 +655,143 @@
 
         function toggleTheme() {
             const current = getTheme();
-            const next = current === 'dark' ? 'light' : 'dark';
-            setTheme(next);
+            setTheme(current === 'dark' ? 'light' : 'dark');
         }
 
-        // Initialize theme on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            setTheme(getTheme());
+        // Sidebar
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Search
+        function openSearch() {
+            document.getElementById('search-modal').classList.add('open');
+            document.getElementById('search-input').focus();
+        }
+
+        function closeSearch(e) {
+            if (e.target.id === 'search-modal') {
+                document.getElementById('search-modal').classList.remove('open');
+            }
+        }
+
+        function handleSearch(query) {
+            const results = document.getElementById('search-results');
+            if (!query) {
+                results.innerHTML = '';
+                return;
+            }
+
+            const q = query.toLowerCase();
+            const matches = chapters.filter(c =>
+                c.title.toLowerCase().includes(q)
+            );
+
+            results.innerHTML = matches.map(c => `
+                <a href="/naochan-diary/rust-ownership-land/${c.file}" class="search-result">
+                    <div class="search-result-title">${c.num}. ${c.title}</div>
+                </a>
+            `).join('') || '<div class="search-result">結果なし</div>';
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                openSearch();
+            }
+            if (e.key === 'Escape') {
+                document.getElementById('search-modal').classList.remove('open');
+            }
         });
 
-        // Apply theme immediately to prevent flash
+        // Generate TOC from h2 elements
+        function generateTOC() {
+            const content = document.getElementById('content');
+            const toc = document.getElementById('toc');
+            const headings = content.querySelectorAll('h2');
+
+            headings.forEach((h, i) => {
+                const id = h.id || `section-${i}`;
+                h.id = id;
+
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = `#${id}`;
+                a.textContent = h.textContent;
+                li.appendChild(a);
+                toc.appendChild(li);
+            });
+        }
+
+        // Highlight current chapter in sidebar
+        function highlightCurrentChapter() {
+            const path = window.location.pathname;
+            const links = document.querySelectorAll('#chapter-nav a');
+            links.forEach(link => {
+                if (path.includes(link.getAttribute('href').split('/').pop())) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Generate prev/next navigation
+        function generateChapterNav() {
+            const path = window.location.pathname;
+            const currentFile = path.split('/').pop();
+            const currentIndex = chapters.findIndex(c => c.file === currentFile);
+
+            if (currentIndex === -1) return;
+
+            const nav = document.getElementById('chapter-nav-bottom');
+            let html = '';
+
+            if (currentIndex > 0) {
+                const prev = chapters[currentIndex - 1];
+                html += `
+                    <a href="/naochan-diary/rust-ownership-land/${prev.file}" class="chapter-nav-item prev">
+                        <span class="chapter-nav-label">← 前の章</span>
+                        <span class="chapter-nav-title">${prev.num}. ${prev.title}</span>
+                    </a>
+                `;
+            }
+
+            if (currentIndex < chapters.length - 1) {
+                const next = chapters[currentIndex + 1];
+                html += `
+                    <a href="/naochan-diary/rust-ownership-land/${next.file}" class="chapter-nav-item next">
+                        <span class="chapter-nav-label">次の章 →</span>
+                        <span class="chapter-nav-title">${next.num}. ${next.title}</span>
+                    </a>
+                `;
+            }
+
+            nav.innerHTML = html;
+        }
+
+        // Add language labels to code blocks
+        function labelCodeBlocks() {
+            document.querySelectorAll('pre code').forEach(block => {
+                const classes = block.className.split(' ');
+                const langClass = classes.find(c => c.startsWith('language-'));
+                if (langClass) {
+                    const lang = langClass.replace('language-', '');
+                    block.parentElement.setAttribute('data-lang', lang);
+                }
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setTheme(getTheme());
+            hljs.highlightAll();
+            generateTOC();
+            highlightCurrentChapter();
+            generateChapterNav();
+            labelCodeBlocks();
+        });
+
+        // Apply theme immediately
         setTheme(getTheme());
     </script>
 </body>
