@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" disabled>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/rust.min.js"></script>
+    <!-- Fuse.js for fuzzy search -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/7.0.0/fuse.min.js"></script>
 
     <style>
         /* Theme variables */
@@ -540,6 +542,12 @@
             color: var(--accent);
             font-weight: 500;
         }
+
+        .search-result-keywords {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
     </style>
 </head>
 <body>
@@ -613,17 +621,32 @@
     </div>
 
     <script>
-        // Chapter data for navigation
+        // Chapter data with keywords for search
         const chapters = [
-            { id: '55', file: '55_intro.html', title: '所有権の大地', num: '01' },
-            { id: '56', file: '56_ownership.html', title: '内部可変性の迷宮', num: '02' },
-            { id: '58', file: '58_borrowing.html', title: 'トレイトの大聖堂', num: '03' },
-            { id: '59', file: '59_lifetime.html', title: 'ジェネリクスの鋳造所', num: '04' },
-            { id: '60', file: '60_error_handling.html', title: 'エラーの峡谷', num: '05' },
-            { id: '61', file: '61_async.html', title: '非同期の浮遊島', num: '06' },
-            { id: '62', file: '62_macro.html', title: 'マクロの魔術塔', num: '07' },
-            { id: '63', file: '63_module.html', title: 'クレートの港', num: '08' }
+            { id: '55', file: '55_intro.html', title: '所有権の大地', num: '01',
+              keywords: '所有権 ownership move 借用 borrow RAII drop スコープ scope String Vec Box 参照 reference unsafe 禁域' },
+            { id: '56', file: '56_ownership.html', title: '内部可変性の迷宮', num: '02',
+              keywords: '内部可変性 interior mutability RefCell Cell Mutex RwLock borrow_mut 実行時チェック Send Sync スレッド thread' },
+            { id: '58', file: '58_borrowing.html', title: 'トレイトの大聖堂', num: '03',
+              keywords: 'トレイト trait impl 静的ディスパッチ 動的ディスパッチ dyn Box vtable Debug Display Clone Copy Iterator 境界 bounds where' },
+            { id: '59', file: '59_lifetime.html', title: 'ジェネリクスの鋳造所', num: '04',
+              keywords: 'ジェネリクス generics 型パラメータ T 関連型 associated type PhantomData ターボフィッシュ turbofish ::<>' },
+            { id: '60', file: '60_error_handling.html', title: 'エラーの峡谷', num: '05',
+              keywords: 'エラー error Result Option Ok Err Some None ? 演算子 unwrap expect match パターンマッチ From Into anyhow thiserror' },
+            { id: '61', file: '61_async.html', title: '非同期の浮遊島', num: '06',
+              keywords: '非同期 async await Future tokio spawn poll Pin Unpin 並行 concurrent executor runtime' },
+            { id: '62', file: '62_macro.html', title: 'マクロの魔術塔', num: '07',
+              keywords: 'マクロ macro macro_rules! 宣言的マクロ 手続き的マクロ proc_macro derive attribute TokenStream quote syn' },
+            { id: '63', file: '63_module.html', title: 'クレートの港', num: '08',
+              keywords: 'モジュール module mod use pub crate クレート Cargo.toml 依存関係 dependency workspace lib bin' }
         ];
+
+        // Initialize Fuse.js for fuzzy search
+        const fuse = new Fuse(chapters, {
+            keys: ['title', 'keywords'],
+            threshold: 0.4,
+            includeScore: true
+        });
 
         // Theme management
         function getTheme() {
@@ -682,16 +705,23 @@
                 return;
             }
 
-            const q = query.toLowerCase();
-            const matches = chapters.filter(c =>
-                c.title.toLowerCase().includes(q)
-            );
+            const matches = fuse.search(query);
 
-            results.innerHTML = matches.map(c => `
-                <a href="/naochan-diary/rust-ownership-land/${c.file}" class="search-result">
-                    <div class="search-result-title">${c.num}. ${c.title}</div>
-                </a>
-            `).join('') || '<div class="search-result">結果なし</div>';
+            results.innerHTML = matches.map(result => {
+                const c = result.item;
+                // Find matching keywords to display
+                const matchedKeywords = c.keywords.split(' ')
+                    .filter(k => k.toLowerCase().includes(query.toLowerCase()))
+                    .slice(0, 3)
+                    .join(', ');
+
+                return `
+                    <a href="/naochan-diary/rust-ownership-land/${c.file}" class="search-result">
+                        <div class="search-result-title">${c.num}. ${c.title}</div>
+                        ${matchedKeywords ? `<div class="search-result-keywords">${matchedKeywords}</div>` : ''}
+                    </a>
+                `;
+            }).join('') || '<div class="search-result">結果なし</div>';
         }
 
         // Keyboard shortcuts
