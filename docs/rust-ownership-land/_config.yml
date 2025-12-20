@@ -1,0 +1,10 @@
+title: 所有権の大地
+description: C/C++経験者のためのRust没入型学習物語
+theme: minima
+markdown: kramdown
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
