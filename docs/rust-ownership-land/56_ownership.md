@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: rust-land
 title: "第2部：内部可変性の迷宮"
 ---
 

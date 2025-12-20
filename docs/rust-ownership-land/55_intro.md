@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: rust-land
 title: "第1部：所有権の大地"
 ---
 

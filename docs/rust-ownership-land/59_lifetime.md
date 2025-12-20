@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: rust-land
 title: "第4部：ジェネリクスの鋳造所"
 ---
 

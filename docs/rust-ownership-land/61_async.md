@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: rust-land
 title: "第6部：非同期の浮遊島"
 ---
 

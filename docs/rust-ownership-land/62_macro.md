@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: rust-land
 title: "第7部：マクロの魔術塔"
 ---
 

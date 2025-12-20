@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: rust-land
 title: "第3部：トレイトの大聖堂"
 ---
 

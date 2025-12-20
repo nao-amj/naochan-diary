@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: rust-land
 title: "第5部：エラーの峡谷"
 ---
 
