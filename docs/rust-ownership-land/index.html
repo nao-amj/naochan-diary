@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>所有権の大地 — Rust学習物語</title>
+    <style>
+        :root {
+            --rust-orange: #f74c00;
+            --rust-brown: #8b4513;
+            --parchment: #f5f0e6;
+            --ink: #2c2c2c;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Noto Serif JP', 'Georgia', serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: var(--parchment);
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 2px solid rgba(247, 76, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--rust-orange);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        .intro {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--rust-orange);
+        }
+
+        .chapters {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .chapter {
+            background: rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(247, 76, 0, 0.2);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .chapter:hover {
+            background: rgba(247, 76, 0, 0.15);
+            transform: translateX(8px);
+            border-color: var(--rust-orange);
+        }
+
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .chapter-num {
+            background: var(--rust-orange);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .chapter-title {
+            font-size: 1.3rem;
+            color: var(--rust-orange);
+        }
+
+        .chapter-desc {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            margin-left: 52px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(247, 76, 0, 0.3);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 52px;
+            margin-top: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--rust-orange);
+        }
+
+        .final-title {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            background: linear-gradient(90deg, transparent, rgba(247, 76, 0, 0.2), transparent);
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .chapter-title { font-size: 1.1rem; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>所有権の大地</h1>
+            <p class="subtitle">— C/C++経験者のためのRust没入型学習物語 —</p>
+        </header>
+
+        <div class="intro">
+            <p>あなたはC/C++の世界で戦い抜いてきた冒険者。<br>
+            しかし今、新たな大地——<strong>Rust</strong>の世界があなたを呼んでいる。</p>
+            <p style="margin-top: 1rem;">ルスタ（ベテランの案内人）とクロム（元C++使いの先輩）と共に、<br>
+            <strong>所有権</strong>・<strong>借用</strong>・<strong>ライフタイム</strong>の真実を解き明かす旅へ。</p>
+        </div>
+
+        <div class="chapters">
+            <a href="https://github.com/nao-amj/naochan-diary/issues/55" class="chapter" target="_blank">
+                <div class="chapter-header">
+                    <span class="chapter-num">1</span>
+                    <span class="chapter-title">所有権の大地</span>
+                </div>
+                <p class="chapter-desc">所有権・借用・RAIIの基本を学ぶ、物語の始まり</p>
+                <span class="badge">禁域の帰還者</span>
+            </a>
+
+            <a href="https://github.com/nao-amj/naochan-diary/issues/56" class="chapter" target="_blank">
+                <div class="chapter-header">
+                    <span class="chapter-num">2</span>
+                    <span class="chapter-title">内部可変性の迷宮</span>
+                </div>
+                <p class="chapter-desc">RefCell・Mutex——不変の外殻の中に可変性を秘める術</p>
+                <span class="badge">内部可変性の探究者</span>
+            </a>
+
+            <a href="https://github.com/nao-amj/naochan-diary/issues/58" class="chapter" target="_blank">
+                <div class="chapter-header">
+                    <span class="chapter-num">3</span>
+                    <span class="chapter-title">トレイトの大聖堂</span>
+                </div>
+                <p class="chapter-desc">トレイト・ディスパッチ——型が結ぶ契約の力</p>
+                <span class="badge">契約の理解者</span>
+            </a>
+
+            <a href="https://github.com/nao-amj/naochan-diary/issues/59" class="chapter" target="_blank">
+                <div class="chapter-header">
+                    <span class="chapter-num">4</span>
+                    <span class="chapter-title">ジェネリクスの鋳造所</span>
+                </div>
+                <p class="chapter-desc">型パラメータ・関連型——抽象を鋳造する技法</p>
+                <span class="badge">鋳型の職人</span>
+            </a>
+
+            <a href="https://github.com/nao-amj/naochan-diary/issues/60" class="chapter" target="_blank">
+                <div class="chapter-header">
+                    <span class="chapter-num">5</span>
+                    <span class="chapter-title">エラーの峡谷</span>
+                </div>
+                <p class="chapter-desc">Result・Option・?——失敗を優雅に扱う術</p>
+                <span class="badge">エラーの調停者</span>
+            </a>
+
+            <a href="https://github.com/nao-amj/naochan-diary/issues/61" class="chapter" target="_blank">
+                <div class="chapter-header">
+                    <span class="chapter-num">6</span>
+                    <span class="chapter-title">非同期の浮遊島</span>
+                </div>
+                <p class="chapter-desc">async/await・tokio——空を駆ける並行処理</p>
+                <span class="badge">空の旅人</span>
+            </a>
+
+            <a href="https://github.com/nao-amj/naochan-diary/issues/62" class="chapter" target="_blank">
+                <div class="chapter-header">
+                    <span class="chapter-num">7</span>
+                    <span class="chapter-title">マクロの魔術塔</span>
+                </div>
+                <p class="chapter-desc">macro_rules!・proc macro——コンパイル時の魔法</p>
+                <span class="badge">魔術の継承者</span>
+            </a>
+
+            <a href="https://github.com/nao-amj/naochan-diary/issues/63" class="chapter" target="_blank">
+                <div class="chapter-header">
+                    <span class="chapter-num">8</span>
+                    <span class="chapter-title">クレートの港</span>
+                </div>
+                <p class="chapter-desc">モジュール・Cargo——世界と繋がる港</p>
+                <span class="badge">港の航海士</span>
+            </a>
+        </div>
+
+        <div class="final-title">
+            最終称号: <strong style="color: var(--rust-orange);">所有権の大地の継承者</strong>
+        </div>
+
+        <footer>
+            <p>dual-world framework による没入型Rust学習コンテンツ</p>
+            <p style="margin-top: 0.5rem;">
+                <a href="https://github.com/nao-amj/naochan-diary/issues/57" target="_blank">シリーズ概要（#57）</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
