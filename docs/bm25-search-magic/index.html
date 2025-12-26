@@ -237,6 +237,69 @@
             font-size: 0.9rem;
         }
 
+        /* Characters Section */
+        .characters {
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+        }
+
+        .characters h2 {
+            text-align: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 40px;
+        }
+
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .character-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .character-card img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 16px;
+            border: 4px solid var(--primary);
+        }
+
+        .character-card.villain img {
+            border-color: #7c3aed;
+        }
+
+        .character-card h3 {
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .character-card .role {
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .character-card.villain .role {
+            color: #7c3aed;
+        }
+
+        .character-card p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
         /* Footer */
         footer {
             background: var(--text);
@@ -356,6 +419,30 @@
                 <div class="feature-icon">🏅</div>
                 <h4>称号システム</h4>
                 <p>各章クリアで称号獲得、最終称号を目指そう</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="characters">
+        <h2>冒険の仲間たち</h2>
+        <div class="characters-grid">
+            <div class="character-card">
+                <img src="images/searcha.png" alt="サーチャ">
+                <h3>サーチャ</h3>
+                <p class="role">検索の塔の見習い司書</p>
+                <p>好奇心旺盛で、一緒に学ぶ仲間。「すごい！こんな仕組みだったんだ！」が口癖。</p>
+            </div>
+            <div class="character-card">
+                <img src="images/index-sensei.png" alt="インデックス先生">
+                <h3>インデックス先生</h3>
+                <p class="role">検索の塔の大司書</p>
+                <p>穏やかで分かりやすく教えてくれる。「いい質問だね」と褒めてくれる。</p>
+            </div>
+            <div class="character-card villain">
+                <img src="images/noise.png" alt="ノイズ">
+                <h3>ノイズ</h3>
+                <p class="role">検索を邪魔する存在</p>
+                <p>関係ない検索結果を混ぜてくる厄介者。でも、彼のおかげで検索の難しさが分かる。</p>
             </div>
         </div>
     </section>
