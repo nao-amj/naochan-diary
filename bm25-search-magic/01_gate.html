@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第1部：検索の門 — 検索の魔法</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #0ea5e9;
+            --accent: #06b6d4;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            --code-bg: #f1f5f9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.9;
+        }
+
+        /* Header */
+        .header {
+            background: var(--gradient);
+            color: var(--white);
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .header .part-number {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .header .meta {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .nav {
+            background: var(--white);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav a:hover { text-decoration: underline; }
+
+        /* Content */
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .content h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 48px 0 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .content h3 {
+            font-size: 1.2rem;
+            color: var(--text);
+            margin: 32px 0 16px;
+        }
+
+        .content p {
+            margin-bottom: 16px;
+        }
+
+        /* Character Dialogue */
+        .dialogue {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .dialogue .speaker {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .dialogue.teacher .speaker { color: #059669; }
+        .dialogue.student .speaker { color: #db2777; }
+
+        /* Code Block */
+        .code-block {
+            background: var(--code-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        /* Tip Box */
+        .tip-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-left: 4px solid #f59e0b;
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .tip-box .title {
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+
+        /* Quiz Section */
+        .quiz {
+            background: var(--white);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .quiz h4 {
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .quiz ul {
+            list-style: none;
+            margin-bottom: 16px;
+        }
+
+        .quiz li {
+            padding: 8px 0;
+        }
+
+        .quiz details {
+            background: var(--code-bg);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .quiz summary {
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        /* Summary Box */
+        .summary-box {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 32px 0;
+        }
+
+        .summary-box h3 {
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+        }
+
+        .summary-box ul {
+            margin-left: 20px;
+        }
+
+        .summary-box li {
+            margin-bottom: 8px;
+        }
+
+        /* Achievement */
+        .achievement {
+            text-align: center;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 32px;
+            border-radius: 16px;
+            margin: 40px 0;
+        }
+
+        .achievement h3 {
+            font-size: 1.5rem;
+            color: #92400e;
+        }
+
+        /* Next Chapter */
+        .next-chapter {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 40px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .next-chapter a {
+            display: inline-block;
+            background: var(--gradient);
+            color: var(--white);
+            padding: 12px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 16px;
+        }
+
+        .next-chapter a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        /* References */
+        .references {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 40px 0;
+        }
+
+        .references h3 {
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .references table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .references td {
+            padding: 8px;
+            border-bottom: 1px solid var(--code-bg);
+        }
+
+        .references a {
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text);
+            color: var(--white);
+            text-align: center;
+            padding: 24px;
+            font-size: 0.9rem;
+        }
+
+        footer a { color: var(--accent); }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.5rem; }
+            .content { padding: 24px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <p class="part-number">第1部</p>
+        <h1>検索の門</h1>
+        <div class="meta">
+            <span>獲得称号: 検索見習い</span>
+            <span>約5分</span>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <a href="index.html">← 目次に戻る</a>
+        <a href="02_score.html">次の章 →</a>
+    </nav>
+
+    <main class="content">
+        <h2>🌟 プロローグ：迷い込んだ塔</h2>
+
+        <p>ある日、君はスマホで調べものをしていた。</p>
+        <p>「東京オリンピック いつ」</p>
+        <p>Enterを押した瞬間——画面が光り、気づくと見知らぬ場所に立っていた。</p>
+        <p>目の前には、天まで届くような巨大な塔がそびえ立っている。入り口には看板があった。</p>
+        <p><strong>「検索の塔 — 知識を求める者よ、ようこそ」</strong></p>
+
+        <h2>📚 第1章：塔の司書たち</h2>
+
+        <p>塔の中に入ると、無限に続くような本棚が広がっていた。何億冊もの本が並んでいる。</p>
+
+        <div class="dialogue student">
+            <p class="speaker">サーチャ</p>
+            <p>「あ、お客さん！私はサーチャ。この塔の見習い司書だよ！君も検索について学びに来たの？」</p>
+        </div>
+
+        <p>奥から、穏やかな雰囲気の老紳士が歩いてきた。</p>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「ようこそ、検索の塔へ。私はインデックス。この塔の大司書を務めている」</p>
+        </div>
+
+        <h2>🔍 第2章：検索って何をしてるの？</h2>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「さて、君は普段どうやって調べものをしているかな？Googleで検索したり、YouTubeで動画を探したり...では『東京オリンピック』と検索したとき、何が起きていると思う？」</p>
+        </div>
+
+        <h3>💡 検索エンジンの仕事</h3>
+
+        <div class="code-block">【検索エンジンの3つの仕事】
+
+1️⃣ クロール（巡回）
+   → ロボットがネット中のページを見て回る
+
+2️⃣ インデックス（整理）
+   → 見つけたページを本棚みたいに整理する
+
+3️⃣ ランキング（順位づけ）
+   → 検索されたら、関係ありそうな順に並べる</div>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「この塔にある本棚が『インデックス』だ。そして、検索されると私たちが『ランキング』を行う」</p>
+        </div>
+
+        <h2>📖 第3章：キーワードマッチング</h2>
+
+        <div class="dialogue student">
+            <p class="speaker">サーチャ</p>
+            <p>「『東京オリンピック』って検索されたから...この言葉が入ってる本を探すね！」</p>
+        </div>
+
+        <p>彼女は素早く本棚を見ていく。</p>
+        <ul>
+            <li>📕「東京オリンピック2021の記録」→ ✅ ある！</li>
+            <li>📗「日本の人口統計」→ ❌ ない...</li>
+            <li>📘「オリンピックの歴史と東京大会」→ ✅ ある！</li>
+            <li>📙「人工知能の未来」→ ❌ ない...</li>
+        </ul>
+
+        <h3>💡 キーワードマッチングとは？</h3>
+
+        <div class="code-block">【キーワードマッチング】
+
+検索ワード：「東京オリンピック」
+
+↓ この言葉が「入っているか、いないか」をチェック
+
+📕 入ってる → ヒット！
+📗 入ってない → スルー
+📘 入ってる → ヒット！
+📙 入ってない → スルー</div>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「基本はシンプルだね。でも、これだけだと問題がある。何だと思う？」</p>
+        </div>
+
+        <h2>❓ 第4章：問題発生！</h2>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「たとえば、こんな文書があったらどうだろう」</p>
+        </div>
+
+        <div class="code-block">📕 文書A（100ページ）
+「東京オリンピック」が50回も出てくる専門書
+
+📘 文書B（10ページ）
+「東京オリンピック」が1回だけ出てくるエッセイ</div>
+
+        <div class="dialogue student">
+            <p class="speaker">サーチャ</p>
+            <p>「あ！どっちも『入ってる』けど、関係の深さが全然違う！」</p>
+        </div>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「その通り。『入ってるか、いないか』だけでは不十分なんだ。<strong>どれくらい関係があるか</strong>を測る必要がある」</p>
+        </div>
+
+        <div class="tip-box">
+            <p class="title">💡 なぜ順位が必要なの？</p>
+            <p>Googleで「猫」と検索すると...約38億件のページがヒット！<br>全部見るのは不可能だから「いい順」に並べる必要があるんだ。</p>
+        </div>
+
+        <h2>🧪 クイズタイム！</h2>
+
+        <div class="quiz">
+            <h4>Q1. 検索エンジンの3つの仕事は？</h4>
+            <ul>
+                <li>A) 作成・保存・削除</li>
+                <li>B) クロール・インデックス・ランキング</li>
+                <li>C) 読み込み・書き込み・実行</li>
+            </ul>
+            <details>
+                <summary>答えを見る</summary>
+                <p><strong>正解: B) クロール・インデックス・ランキング</strong></p>
+                <p>クロール = ネットを巡回してページを見つける<br>インデックス = 見つけたページを整理する<br>ランキング = 検索されたら順位をつけて表示する</p>
+            </details>
+        </div>
+
+        <div class="quiz">
+            <h4>Q2. 「キーワードマッチング」の問題点は？</h4>
+            <ul>
+                <li>A) 速度が遅い</li>
+                <li>B) 関係の深さが分からない</li>
+                <li>C) 日本語が使えない</li>
+            </ul>
+            <details>
+                <summary>答えを見る</summary>
+                <p><strong>正解: B) 関係の深さが分からない</strong></p>
+                <p>「言葉が入っているか、いないか」しか見ないので、1回しか出てこない文書も、50回出てくる文書も同じ扱いになってしまう。</p>
+            </details>
+        </div>
+
+        <div class="quiz">
+            <h4>Q3. なぜ検索結果に「順位」が必要？</h4>
+            <ul>
+                <li>A) 古い順に並べるため</li>
+                <li>B) 結果が多すぎて全部見れないから</li>
+                <li>C) アルファベット順にするため</li>
+            </ul>
+            <details>
+                <summary>答えを見る</summary>
+                <p><strong>正解: B) 結果が多すぎて全部見れないから</strong></p>
+                <p>「猫」で検索すると38億件！全部見るのは不可能なので、「いい順」に並べる必要がある。</p>
+            </details>
+        </div>
+
+        <div class="summary-box">
+            <h3>🎯 第1部まとめ</h3>
+            <ul>
+                <li>✅ 検索エンジンの3つの仕事：クロール → インデックス → ランキング</li>
+                <li>✅ キーワードマッチング：言葉が「入ってるか」をチェック</li>
+                <li>✅ キーワードマッチングの限界：関係の深さが分からない！</li>
+                <li>✅ だからランキングが必要：「いい順」に並べる仕組みが必要</li>
+            </ul>
+        </div>
+
+        <div class="achievement">
+            <p>✨</p>
+            <h3>【検索見習い】を獲得！</h3>
+        </div>
+
+        <div class="next-chapter">
+            <p>次回予告</p>
+            <p>「でも待って、先生。『いい順』ってどうやって決めるの？」</p>
+            <p>次は『スコアの秘密』について学ぶ。<strong>BM25</strong>という魔法の登場だ！</p>
+            <a href="02_score.html">第2部「スコアの秘密」へ進む →</a>
+        </div>
+
+        <div class="references">
+            <h3>📚 もっと知りたい人へ</h3>
+            <table>
+                <tr>
+                    <td>Google検索の仕組み</td>
+                    <td><a href="https://www.google.com/search/howsearchworks/" target="_blank">Google: 検索の仕組み</a></td>
+                </tr>
+                <tr>
+                    <td>クロールとインデックス</td>
+                    <td><a href="https://developers.google.com/search/docs/fundamentals/how-search-works" target="_blank">Google検索セントラル</a></td>
+                </tr>
+                <tr>
+                    <td>検索エンジンの歴史</td>
+                    <td><a href="https://ja.wikipedia.org/wiki/%E6%A4%9C%E7%B4%A2%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3" target="_blank">Wikipedia: 検索エンジン</a></td>
+                </tr>
+            </table>
+            <p style="margin-top: 16px; font-size: 0.9rem; color: var(--text-light);">
+                💡 この学習コンテンツは<a href="https://www.issoh.co.jp/tech/details/4388/">一創の技術記事</a>を基に、中学生向けにアレンジしました。
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <p>検索の魔法 — BM25マスターへの道 | Three Hearts Space | 2025</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>検索の魔法 — BM25マスターへの道</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #0ea5e9;
+            --accent: #06b6d4;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--gradient);
+            color: var(--white);
+            padding: 80px 20px 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: 0.02em;
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 24px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .intro {
+            text-align: center;
+            padding: 60px 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .intro h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .intro p {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        /* Cards Section */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            padding: 20px 20px 80px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            color: var(--white);
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .card .description {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .card .meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 0.85rem;
+        }
+
+        .card .title-badge {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .card .time {
+            color: var(--text-light);
+        }
+
+        /* Features Section */
+        .features {
+            background: var(--white);
+            padding: 60px 20px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 32px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .feature h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .feature p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text);
+            color: var(--white);
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        footer p {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1rem;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-content">
+            <h1>検索の魔法 — BM25マスターへの道</h1>
+            <p class="subtitle">Google検索の裏側で動いている「魔法」を、物語で学ぼう</p>
+            <span class="badge">中学生から学べる検索技術入門</span>
+        </div>
+    </header>
+
+    <section class="intro">
+        <h2>検索エンジンの秘密を解き明かす</h2>
+        <p>
+            「東京オリンピック」と検索したとき、何が起きているか知っていますか？<br>
+            BM25というアルゴリズムが、何億ものページから「いい順」に並べてくれています。<br>
+            この物語で、その魔法の正体を一緒に探検しましょう。
+        </p>
+    </section>
+
+    <section class="cards">
+        <a href="01_gate.html" class="card">
+            <div class="card-number">1</div>
+            <h3>検索の門</h3>
+            <p class="description">検索エンジンの3つの仕事と、キーワードマッチングの基本を学ぶ</p>
+            <div class="meta">
+                <span class="title-badge">検索見習い</span>
+                <span class="time">約5分</span>
+            </div>
+        </a>
+
+        <a href="02_score.html" class="card">
+            <div class="card-number">2</div>
+            <h3>スコアの秘密</h3>
+            <p class="description">TF・IDF・長さ補正 — BM25の核心を理解する</p>
+            <div class="meta">
+                <span class="title-badge">スコアの理解者</span>
+                <span class="time">約7分</span>
+            </div>
+        </a>
+
+        <a href="03_meaning.html" class="card">
+            <div class="card-number">3</div>
+            <h3>意味を読む力</h3>
+            <p class="description">ベクトル検索の世界 — 言葉を「座標」で表す技術</p>
+            <div class="meta">
+                <span class="title-badge">意味の探索者</span>
+                <span class="time">約6分</span>
+            </div>
+        </a>
+
+        <a href="04_future.html" class="card">
+            <div class="card-number">4</div>
+            <h3>未来の検索</h3>
+            <p class="description">ハイブリッド検索とAI — ChatGPTも使っている最新技術</p>
+            <div class="meta">
+                <span class="title-badge">検索の魔術師見習い</span>
+                <span class="time">約8分</span>
+            </div>
+        </a>
+    </section>
+
+    <section class="features">
+        <div class="features-grid">
+            <div class="feature">
+                <div class="feature-icon">📚</div>
+                <h4>物語形式</h4>
+                <p>サーチャとインデックス先生と一緒に冒険しながら学ぶ</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🧪</div>
+                <h4>クイズ付き</h4>
+                <p>各章末にクイズがあり理解度をチェックできる</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔗</div>
+                <h4>参考リンク</h4>
+                <p>もっと学びたい人のためのエビデンス付き</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🏅</div>
+                <h4>称号システム</h4>
+                <p>各章クリアで称号獲得、最終称号を目指そう</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>
+            この学習コンテンツは<a href="https://www.issoh.co.jp/tech/details/4388/" target="_blank">一創の技術記事</a>を基に、<br>
+            中学生向けにアレンジしました。
+        </p>
+        <p style="margin-top: 16px;">
+            Three Hearts Space | 2025
+        </p>
+    </footer>
+</body>
+</html>

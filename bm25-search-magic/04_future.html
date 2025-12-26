@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第4部：未来の検索 — 検索の魔法</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #0ea5e9;
+            --accent: #06b6d4;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            --code-bg: #f1f5f9;
+            --gold: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.9; }
+        .header { background: var(--gradient); color: var(--white); padding: 40px 20px; text-align: center; }
+        .header .part-number { font-size: 0.9rem; opacity: 0.9; margin-bottom: 8px; }
+        .header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 12px; }
+        .header .meta { display: flex; justify-content: center; gap: 20px; font-size: 0.9rem; opacity: 0.9; }
+        .nav { background: var(--white); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .nav a { color: var(--primary); text-decoration: none; font-weight: 500; }
+        .nav a:hover { text-decoration: underline; }
+        .content { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .content h2 { font-size: 1.5rem; color: var(--primary); margin: 48px 0 20px; padding-bottom: 8px; border-bottom: 2px solid var(--primary); }
+        .content h3 { font-size: 1.2rem; color: var(--text); margin: 32px 0 16px; }
+        .content p { margin-bottom: 16px; }
+        .dialogue { background: var(--white); border-radius: 12px; padding: 20px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .dialogue .speaker { font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+        .dialogue.teacher .speaker { color: #059669; }
+        .dialogue.student .speaker { color: #db2777; }
+        .dialogue.villain .speaker { color: #7c3aed; }
+        .code-block { background: var(--code-bg); border-radius: 8px; padding: 20px; margin: 20px 0; font-family: 'Monaco', 'Consolas', monospace; font-size: 0.9rem; overflow-x: auto; white-space: pre-wrap; line-height: 1.6; }
+        .tip-box { background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 4px solid #f59e0b; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .tip-box .title { font-weight: 700; color: #92400e; margin-bottom: 8px; }
+        .quiz { background: var(--white); border: 2px solid var(--primary); border-radius: 12px; padding: 24px; margin: 24px 0; }
+        .quiz h4 { color: var(--primary); margin-bottom: 16px; }
+        .quiz ul { list-style: none; margin-bottom: 16px; }
+        .quiz li { padding: 8px 0; }
+        .quiz details { background: var(--code-bg); padding: 16px; border-radius: 8px; margin-top: 12px; }
+        .quiz summary { cursor: pointer; font-weight: 500; color: var(--primary); }
+        .summary-box { background: linear-gradient(135deg, #dbeafe, #bfdbfe); border-radius: 12px; padding: 24px; margin: 32px 0; }
+        .summary-box h3 { color: var(--primary-dark); margin-bottom: 16px; }
+        .summary-box ul { margin-left: 20px; }
+        .summary-box li { margin-bottom: 8px; }
+        .final-achievement { text-align: center; background: var(--gold); padding: 48px 32px; border-radius: 20px; margin: 48px 0; color: var(--white); }
+        .final-achievement h3 { font-size: 1.8rem; margin-bottom: 16px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .certificate { background: var(--white); border-radius: 16px; padding: 32px; margin: 32px auto; max-width: 500px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 3px solid #fbbf24; }
+        .certificate h4 { color: var(--primary); font-size: 1.3rem; margin-bottom: 16px; }
+        .certificate p { color: var(--text); margin-bottom: 12px; }
+        .certificate .signature { margin-top: 24px; font-style: italic; color: var(--text-light); }
+        .next-steps { background: linear-gradient(135deg, #ecfdf5, #d1fae5); border-radius: 12px; padding: 24px; margin: 32px 0; }
+        .next-steps h3 { color: #059669; margin-bottom: 16px; }
+        .next-steps ul { margin-left: 20px; }
+        .next-steps li { margin-bottom: 8px; }
+        .references { background: var(--white); border-radius: 12px; padding: 24px; margin: 40px 0; }
+        .references h3 { color: var(--text); margin-bottom: 16px; }
+        .references table { width: 100%; border-collapse: collapse; }
+        .references td { padding: 8px; border-bottom: 1px solid var(--code-bg); }
+        .references a { color: var(--primary); }
+        footer { background: var(--text); color: var(--white); text-align: center; padding: 24px; font-size: 0.9rem; }
+        footer a { color: var(--accent); }
+        .back-to-top { display: inline-block; background: var(--gradient); color: var(--white); padding: 12px 32px; border-radius: 8px; text-decoration: none; font-weight: 500; margin-top: 24px; }
+        @media (max-width: 768px) { .header h1 { font-size: 1.5rem; } .content { padding: 24px 16px; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <p class="part-number">第4部（最終章）</p>
+        <h1>未来の検索</h1>
+        <div class="meta">
+            <span>最終称号: 検索の魔術師見習い</span>
+            <span>約8分</span>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <a href="03_meaning.html">← 前の章</a>
+        <a href="index.html">目次</a>
+    </nav>
+
+    <main class="content">
+        <h2>🌟 前回のあらすじ</h2>
+        <p>ベクトル検索を学んだ。言葉を「座標」で表し、意味の近さを測る技術。「猫」と「ネコ」が同じように扱える。でも、固有名詞の検索ではBM25の方が得意。</p>
+        <p>それぞれに得意分野がある...なら、<strong>両方使えばいいのでは？</strong></p>
+
+        <h2>🏰 第1章：融合の塔</h2>
+        <p>森を抜けると、二つの塔が合体したような不思議な建物があった。</p>
+
+        <div class="dialogue student">
+            <p class="speaker">サーチャ</p>
+            <p>「なにこれ！？塔が...二つくっついてる！」</p>
+        </div>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「ここは『融合の塔』。BM25とベクトル検索、二つの力を合わせる場所だ」</p>
+        </div>
+
+        <p>入り口には大きな看板。<strong>「ハイブリッド検索 — 最強の検索を目指して」</strong></p>
+
+        <h2>⚡ 第2章：ハイブリッド検索とは？</h2>
+
+        <div class="code-block">【ハイブリッド検索 = BM25 + ベクトル検索】
+
+検索ワード：「お腹が痛いとき 対処法」
+
+┌──────────────────┐
+│  ステップ1       │
+│  BM25で検索      │
+│  ・キーワード一致│
+│  ・高速！        │
+│  → 候補100件     │
+└────────┬─────────┘
+         ↓
+┌──────────────────┐
+│  ステップ2       │
+│  ベクトルで精査  │
+│  ・意味の近さ    │
+│  ・より正確に    │
+│  → 上位10件     │
+└────────┬─────────┘
+         ↓
+    🎯 最適な結果！</div>
+
+        <div class="dialogue student">
+            <p class="speaker">サーチャ</p>
+            <p>「まずBM25でザッと絞って、ベクトル検索で仕上げるんだ！」</p>
+        </div>
+
+        <h2>🔀 第3章：スコアの合成</h2>
+
+        <div class="code-block">【スコアの合成】
+
+最終スコア = BM25スコア × 0.4 + ベクトルスコア × 0.6
+
+例：ある文書
+・BM25スコア: 80点
+・ベクトルスコア: 90点
+
+最終スコア = 80 × 0.4 + 90 × 0.6
+           = 32 + 54
+           = 86点！</div>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「0.4と0.6は、それぞれの重要度だ。この場合、意味（ベクトル）を少し重視している。この比率は検索の目的によって変えられる」</p>
+        </div>
+
+        <div class="code-block">【目的別の重み付け】
+
+固有名詞を検索したいとき:
+  BM25 × 0.7 + ベクトル × 0.3
+
+あいまいな質問のとき:
+  BM25 × 0.3 + ベクトル × 0.7
+
+バランス型:
+  BM25 × 0.5 + ベクトル × 0.5</div>
+
+        <h2>🌐 第4章：ハイブリッド検索の実例</h2>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「実は、君が普段使っているサービスにも使われている」</p>
+        </div>
+
+        <div class="code-block">【ECサイト（Amazon、楽天など）】
+
+「青い ワイヤレス イヤホン」で検索
+
+1. BM25: 「青い」「ワイヤレス」「イヤホン」を含む商品を検索
+2. ベクトル: 「ブルートゥース」「コードレス」なども関連として追加
+3. 結果: キーワード一致 + 関連商品も表示！</div>
+
+        <div class="code-block">【動画サイト（YouTube、TikTokなど）】
+
+「面白い猫動画」で検索
+
+1. BM25: 「猫」「面白い」を含むタイトル・説明文
+2. ベクトル: 「ネコ」「おもしろ」「笑える」「かわいい」も関連
+3. 結果: いろんな言い方の動画が見つかる！</div>
+
+        <div class="code-block">【FAQシステム（お客様サポート）】
+
+「パスワードを忘れた」と質問
+
+1. BM25: 「パスワード」「忘れた」を含むFAQ
+2. ベクトル: 「ログインできない」「再設定」「認証」も関連
+3. 結果: 質問の言い方が違っても答えが見つかる！</div>
+
+        <h2>🤖 第5章：AIと検索の未来</h2>
+
+        <p>突然、塔が光り始めた。</p>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「さあ、最後に未来を見せよう」</p>
+        </div>
+
+        <h3>💡 ChatGPTも検索を使っている！</h3>
+
+        <div class="dialogue student">
+            <p class="speaker">サーチャ</p>
+            <p>「あ、これ知ってる！ChatGPTだ！」</p>
+        </div>
+
+        <div class="code-block">【RAG（検索拡張生成）】
+
+1. ユーザーが質問
+   「日本で一番高い山は？」
+
+2. まずハイブリッド検索でデータを探す
+   → 関連する情報を取得
+
+3. AIが検索結果を読んで回答を生成
+   「日本で一番高い山は富士山（3776m）です」
+
+↓
+
+検索 + AI = より正確な回答！</div>
+
+        <div class="tip-box">
+            <p class="title">📚 最新技術</p>
+            <p>この技術は「RAG（Retrieval-Augmented Generation）」と呼ばれ、2023年以降急速に普及しています。</p>
+        </div>
+
+        <div class="code-block">【検索技術の歴史】
+
+1990年代: キーワード検索（TF-IDF）
+    ↓
+1994年: BM25の登場 ← 今も現役！
+    ↓
+2010年代: ベクトル検索（Word2Vec, BERT）
+    ↓
+2020年代: ハイブリッド検索 + AI（RAG）
+    ↓
+未来: ???
+
+BM25は30年経っても使われている「基礎技術」！</div>
+
+        <h2>🏆 第6章：最終試練</h2>
+
+        <div class="dialogue villain">
+            <p class="speaker">ノイズ</p>
+            <p>「待て！お前たちがここまで来るとはな...最後の試練だ。答えられるか？」</p>
+        </div>
+
+        <h2>🧪 最終クイズ！</h2>
+
+        <div class="quiz">
+            <h4>Q1. ハイブリッド検索とは？</h4>
+            <ul>
+                <li>A) BM25だけを使う検索</li>
+                <li>B) ベクトル検索だけを使う検索</li>
+                <li>C) BM25とベクトル検索を組み合わせた検索</li>
+            </ul>
+            <details>
+                <summary>答えを見る</summary>
+                <p><strong>正解: C) BM25とベクトル検索を組み合わせた検索</strong></p>
+                <p>それぞれの長所を活かすことで、より精度の高い検索を実現。</p>
+            </details>
+        </div>
+
+        <div class="quiz">
+            <h4>Q2. ハイブリッド検索の利点は？</h4>
+            <ul>
+                <li>A) 計算が簡単になる</li>
+                <li>B) キーワード検索と意味検索の両方ができる</li>
+                <li>C) インターネット接続が不要になる</li>
+            </ul>
+            <details>
+                <summary>答えを見る</summary>
+                <p><strong>正解: B) キーワード検索と意味検索の両方ができる</strong></p>
+                <p>BM25の正確さと、ベクトル検索の柔軟さを両立。</p>
+            </details>
+        </div>
+
+        <div class="quiz">
+            <h4>Q3. ChatGPTが使っているRAGとは？</h4>
+            <ul>
+                <li>A) 検索した情報を基にAIが回答を生成する技術</li>
+                <li>B) ゲームのキャラクター</li>
+                <li>C) プログラミング言語</li>
+            </ul>
+            <details>
+                <summary>答えを見る</summary>
+                <p><strong>正解: A) 検索した情報を基にAIが回答を生成する技術</strong></p>
+                <p>RAG = Retrieval-Augmented Generation（検索拡張生成）。検索 + AI で、より正確な回答を作る。</p>
+            </details>
+        </div>
+
+        <h2>🎊 エンディング：検索の魔術師見習い</h2>
+
+        <p>ノイズが消えていった。</p>
+
+        <div class="dialogue villain">
+            <p class="speaker">ノイズ</p>
+            <p>「くっ...お前たちの知識は本物だったようだ...」</p>
+        </div>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「おめでとう。君はすべての試練を乗り越えた」</p>
+        </div>
+
+        <div class="final-achievement">
+            <p style="font-size: 2rem;">✨🏆✨</p>
+            <h3>【検索の魔術師見習い】を獲得！</h3>
+            <p>全4部クリア達成！</p>
+        </div>
+
+        <div class="certificate">
+            <p style="font-size: 1.5rem;">🎓</p>
+            <h4>認 定 証</h4>
+            <p>あなたは検索の基礎を学び、<br>BM25、ベクトル検索、ハイブリッド検索の<br>知識を身につけました。</p>
+            <p>今日から、あなたは<br><strong>【検索の魔術師見習い】</strong>です。</p>
+            <p>いつかこの知識を活かして、<br>世界をより便利にしてください。</p>
+            <p class="signature">検索の塔 大司書<br>インデックス</p>
+        </div>
+
+        <div class="summary-box">
+            <h3>🎯 全編まとめ</h3>
+            <ul>
+                <li><strong>【第1部】検索の門</strong>：検索エンジンの3つの仕事、キーワードマッチングとその限界</li>
+                <li><strong>【第2部】スコアの秘密</strong>：TF（出現回数）+ IDF（レア度）+ 長さ補正 = BM25</li>
+                <li><strong>【第3部】意味を読む力</strong>：ベクトル検索（言葉を座標で表す）、BM25との使い分け</li>
+                <li><strong>【第4部】未来の検索</strong>：ハイブリッド検索、AIも検索を使っている（RAG）</li>
+            </ul>
+        </div>
+
+        <h2>🌟 これからの君へ</h2>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「検索は、<strong>知識への入り口</strong>だ。君がこれから何かを調べるとき、裏側でBM25やベクトル検索が動いている。その仕組みを知った君は、もう検索をただ『使う』だけではない」</p>
+        </div>
+
+        <div class="dialogue student">
+            <p class="speaker">サーチャ</p>
+            <p>「検索を『理解して使う』ってこと？」</p>
+        </div>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「その通り。そして、もし興味があれば...いつか<strong>検索を作る側</strong>になってくれ」</p>
+        </div>
+
+        <div class="next-steps">
+            <h3>🚀 さらに学びたい人へ</h3>
+            <ul>
+                <li><strong>Pythonを学んでみる</strong> → 実際にBM25を動かしてみよう</li>
+                <li><strong>情報検索について調べる</strong> → 大学の「情報検索」「自然言語処理」の授業</li>
+                <li><strong>AIについて学ぶ</strong> → ChatGPTの仕組み、機械学習の基礎</li>
+                <li><strong>自分で検索システムを作ってみる</strong> → Elasticsearch、Meilisearchなどのツール</li>
+            </ul>
+        </div>
+
+        <div class="dialogue student">
+            <p class="speaker">サーチャ</p>
+            <p>「またね！検索の塔で待ってるよ！」</p>
+        </div>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「いつでも戻ってきなさい。知識の扉は、いつも開いている」</p>
+        </div>
+
+        <div class="references">
+            <h3>📚 参考リンク（全編通し）</h3>
+            <table>
+                <tr><td>Google検索の仕組み</td><td><a href="https://www.google.com/search/howsearchworks/" target="_blank">Google: How Search Works</a></td></tr>
+                <tr><td>BM25（Wikipedia）</td><td><a href="https://en.wikipedia.org/wiki/Okapi_BM25" target="_blank">Okapi BM25</a></td></tr>
+                <tr><td>TF-IDF</td><td><a href="https://ja.wikipedia.org/wiki/Tf-idf" target="_blank">Wikipedia: TF-IDF</a></td></tr>
+                <tr><td>Word2Vec</td><td><a href="https://en.wikipedia.org/wiki/Word2vec" target="_blank">Wikipedia: Word2vec</a></td></tr>
+                <tr><td>BERT（Google AI）</td><td><a href="https://ai.googleblog.com/2018/11/open-sourcing-bert-state-of-art-pre.html" target="_blank">Open Sourcing BERT</a></td></tr>
+                <tr><td>Elasticsearch</td><td><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-similarity.html" target="_blank">Elastic: Similarity</a></td></tr>
+                <tr><td>RAG（IBM）</td><td><a href="https://www.ibm.com/topics/retrieval-augmented-generation" target="_blank">What is RAG?</a></td></tr>
+                <tr><td>ハイブリッド検索</td><td><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/knn-search.html" target="_blank">Elastic: Hybrid Search</a></td></tr>
+            </table>
+            <p style="margin-top: 16px; font-size: 0.9rem; color: var(--text-light);">
+                💡 この学習コンテンツは<a href="https://www.issoh.co.jp/tech/details/4388/">一創の技術記事</a>を基に、中学生向けにアレンジしました。
+            </p>
+        </div>
+
+        <div style="text-align: center; margin: 48px 0;">
+            <p style="font-size: 1.5rem;">🎉 おめでとう！全4部クリア！ 🎉</p>
+            <a href="index.html" class="back-to-top">← 目次に戻る</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>検索の魔法 — BM25マスターへの道 | Three Hearts Space | 2025</p>
+    </footer>
+</body>
+</html>

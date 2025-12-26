@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第3部：意味を読む力 — 検索の魔法</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #0ea5e9;
+            --accent: #06b6d4;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            --code-bg: #f1f5f9;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.9; }
+        .header { background: var(--gradient); color: var(--white); padding: 40px 20px; text-align: center; }
+        .header .part-number { font-size: 0.9rem; opacity: 0.9; margin-bottom: 8px; }
+        .header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 12px; }
+        .header .meta { display: flex; justify-content: center; gap: 20px; font-size: 0.9rem; opacity: 0.9; }
+        .nav { background: var(--white); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .nav a { color: var(--primary); text-decoration: none; font-weight: 500; }
+        .nav a:hover { text-decoration: underline; }
+        .content { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .content h2 { font-size: 1.5rem; color: var(--primary); margin: 48px 0 20px; padding-bottom: 8px; border-bottom: 2px solid var(--primary); }
+        .content h3 { font-size: 1.2rem; color: var(--text); margin: 32px 0 16px; }
+        .content p { margin-bottom: 16px; }
+        .dialogue { background: var(--white); border-radius: 12px; padding: 20px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .dialogue .speaker { font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+        .dialogue.teacher .speaker { color: #059669; }
+        .dialogue.student .speaker { color: #db2777; }
+        .dialogue.villain .speaker { color: #7c3aed; }
+        .code-block { background: var(--code-bg); border-radius: 8px; padding: 20px; margin: 20px 0; font-family: 'Monaco', 'Consolas', monospace; font-size: 0.9rem; overflow-x: auto; white-space: pre-wrap; line-height: 1.6; }
+        .tip-box { background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 4px solid #f59e0b; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .tip-box .title { font-weight: 700; color: #92400e; margin-bottom: 8px; }
+        .quiz { background: var(--white); border: 2px solid var(--primary); border-radius: 12px; padding: 24px; margin: 24px 0; }
+        .quiz h4 { color: var(--primary); margin-bottom: 16px; }
+        .quiz ul { list-style: none; margin-bottom: 16px; }
+        .quiz li { padding: 8px 0; }
+        .quiz details { background: var(--code-bg); padding: 16px; border-radius: 8px; margin-top: 12px; }
+        .quiz summary { cursor: pointer; font-weight: 500; color: var(--primary); }
+        .summary-box { background: linear-gradient(135deg, #dbeafe, #bfdbfe); border-radius: 12px; padding: 24px; margin: 32px 0; }
+        .summary-box h3 { color: var(--primary-dark); margin-bottom: 16px; }
+        .summary-box ul { margin-left: 20px; }
+        .summary-box li { margin-bottom: 8px; }
+        .achievement { text-align: center; background: linear-gradient(135deg, #fef3c7, #fde68a); padding: 32px; border-radius: 16px; margin: 40px 0; }
+        .achievement h3 { font-size: 1.5rem; color: #92400e; }
+        .next-chapter { background: var(--white); border-radius: 12px; padding: 24px; margin: 40px 0; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .next-chapter a { display: inline-block; background: var(--gradient); color: var(--white); padding: 12px 32px; border-radius: 8px; text-decoration: none; font-weight: 500; margin-top: 16px; }
+        .references { background: var(--white); border-radius: 12px; padding: 24px; margin: 40px 0; }
+        .references h3 { color: var(--text); margin-bottom: 16px; }
+        .references table { width: 100%; border-collapse: collapse; }
+        .references td { padding: 8px; border-bottom: 1px solid var(--code-bg); }
+        .references a { color: var(--primary); }
+        footer { background: var(--text); color: var(--white); text-align: center; padding: 24px; font-size: 0.9rem; }
+        footer a { color: var(--accent); }
+        @media (max-width: 768px) { .header h1 { font-size: 1.5rem; } .content { padding: 24px 16px; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <p class="part-number">第3部</p>
+        <h1>意味を読む力</h1>
+        <div class="meta">
+            <span>獲得称号: 意味の探索者</span>
+            <span>約6分</span>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <a href="02_score.html">← 前の章</a>
+        <a href="index.html">目次</a>
+        <a href="04_future.html">次の章 →</a>
+    </nav>
+
+    <main class="content">
+        <h2>🌟 前回のあらすじ</h2>
+        <p>BM25の魔法を学んだ。</p>
+        <p><strong>スコア = TF + IDF + 長さ補正 を組み合わせる</strong></p>
+        <p>言葉の出現回数、レア度、文書の長さを考慮して点数をつける。これで「いい順」に並べられる。</p>
+        <p>でも、サーチャは気づいた。「『猫』と『ネコ』は同じ意味なのに、言葉が違うとヒットしない...？」</p>
+
+        <h2>🌳 第1章：意味の森</h2>
+        <p>塔を出ると、不思議な森が広がっていた。木々には言葉が書かれた札がぶら下がっている。</p>
+        <ul>
+            <li>「猫」🐱</li>
+            <li>「ネコ」🐱</li>
+            <li>「キャット」🐱</li>
+            <li>「ペット」🐕🐱</li>
+            <li>「動物」🦁🐱🐕</li>
+        </ul>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「ここは『意味の森』。言葉たちが意味でつながっている場所だ」</p>
+        </div>
+
+        <h3>💡 BM25の限界</h3>
+
+        <div class="dialogue student">
+            <p class="speaker">サーチャ</p>
+            <p>「あれ？『猫』と『ネコ』って同じ意味だよね？」</p>
+        </div>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「そう。でもBM25は<strong>言葉の一致</strong>しか見ない」</p>
+        </div>
+
+        <div class="code-block">【BM25の限界】
+
+検索：「猫」
+
+📕「猫の飼い方」→ 「猫」がある → ✅ ヒット！
+📘「ネコと暮らす」→ 「猫」がない → ❌ ヒットしない...
+
+え？同じ意味なのに？</div>
+
+        <h2>🎯 第2章：言葉を座標にする</h2>
+
+        <p>森の奥に、不思議な地図があった。</p>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「これが『意味の地図』だ。言葉を座標で表している」</p>
+        </div>
+
+        <div class="code-block">【意味の地図（イメージ）】
+
+         動物
+          ↑
+    犬 ← ─●─ → 猫/ネコ/キャット
+          ↓
+         魚
+
+近い言葉 = 意味が似ている！</div>
+
+        <div class="dialogue student">
+            <p class="speaker">サーチャ</p>
+            <p>「えっ、言葉が地図の上にあるの？」</p>
+        </div>
+
+        <div class="dialogue teacher">
+            <p class="speaker">インデックス先生</p>
+            <p>「これを<strong>ベクトル</strong>と呼ぶ。言葉を数字の列で表すんだ」</p>
+        </div>
+
+        <div class="code-block">【ベクトル = 数字の列】
+
+「猫」  → [0.8, 0.2, 0.1, 0.9, ...]
+「ネコ」→ [0.79, 0.21, 0.11, 0.88, ...]
+「犬」  → [0.7, 0.3, 0.1, 0.85, ...]
+「車」  → [0.1, 0.9, 0.8, 0.1, ...]
+
+↓
+
+「猫」と「ネコ」の数字はほぼ同じ！ = 意味が近い！
+「猫」と「車」の数字は全然違う = 意味が遠い</div>
+
+        <div class="tip-box">
+            <p class="title">📚 豆知識</p>
+            <p>この技術は「Word2Vec」や「BERT」と呼ばれるAI技術で実現されています。</p>
+        </div>
+
+        <h2>🧭 第3章：意味の近さを測る</h2>
+
+        <div class="code-block">【意味の近さを測る方法】
+
+「猫」と「ネコ」の距離 → とても近い（0.98）→ ほぼ同じ意味！
+「猫」と「犬」の距離   → まあまあ近い（0.75）→ 似た意味
+「猫」と「車」の距離   → とても遠い（0.12）→ 全然違う意味
+
+数字が1に近いほど、意味が似ている！</div>
+
+        <div class="dialogue student">
+            <p class="speaker">サーチャ</p>
+            <p>「すごい！これなら『猫』で検索しても『ネコ』の記事が見つかる！」</p>
+        </div>
+
+        <h2>🆚 第4章：BM25 vs ベクトル検索</h2>
+
+        <div class="code-block">┌─────────────────────────────────────────────────┐
+│           【BM25 vs ベクトル検索】              │
+├─────────────────────────────────────────────────┤
+│                                                 │
+│  【BM25】キーワード検索                         │
+│  ・言葉が一致してるかを見る                     │
+│  ・「猫」と「ネコ」は別物扱い                   │
+│  ・固有名詞（人名・商品名）に強い               │
+│  ・速い！                                       │
+│                                                 │
+│  【ベクトル検索】意味検索                       │
+│  ・意味が近いかを見る                           │
+│  ・「猫」と「ネコ」は同じ扱い                   │
+│  ・あいまいな質問に強い                         │
+│  ・計算が重い                                   │
+│                                                 │
+└─────────────────────────────────────────────────┘</div>
+
+        <h3>例：それぞれの得意分野</h3>
+
+        <div class="code-block">【固有名詞の検索（BM25が得意）】
+
+検索：「東京スカイツリー」
+
+BM25 → 「東京スカイツリー」という言葉を正確に探す → ✅ 完璧！
+ベクトル → 「タワー」「高い建物」も出てくる → △ 余計なものも...</div>
+
+        <div class="code-block">【あいまいな質問（ベクトル検索が得意）】
+
+検索：「お腹が痛いときどうすればいい」
+
+BM25 → この文章と一致する記事を探す → △ 見つかりにくい
+ベクトル → 「腹痛」「胃腸炎」「病院」も含めて探す → ✅ 関連記事が見つかる！</div>
+
+        <h2>🎭 第5章：ノイズとの戦い</h2>
+
+        <p>突然、森が暗くなった。影から現れたのは、もやもやした存在——<strong>ノイズ</strong>。</p>
+
+        <div class="dialogue villain">
+            <p class="speaker">ノイズ</p>
+            <p>「ククク...ベクトル検索は意味が近いものを見つける...でも、それは<strong>関係ないものも拾う</strong>ということだ！」</p>
+        </div>
+
+        <div class="code-block">【ノイズの攻撃】
+
+検索：「アップル」
+
+欲しいもの：Apple社の製品情報
+拾ってしまうもの：
+・りんごのレシピ 🍎
+・アップルパイの作り方 🥧
+・果物屋さんの情報 🍏</div>
+
+        <div class="dialogue student">
+            <p class="speaker">サーチャ</p>
+            <p>「確かに...『意味が近い』だけじゃダメなときもある！」</p>
+        </div>
+
+        <h2>🧪 クイズタイム！</h2>
+
+        <div class="quiz">
+            <h4>Q1. ベクトル検索の特徴は？</h4>
+            <ul>
+                <li>A) 言葉の一致を見る</li>
+                <li>B) 意味の近さを見る</li>
+                <li>C) 文字数を数える</li>
+            </ul>
+            <details>
+                <summary>答えを見る</summary>
+                <p><strong>正解: B) 意味の近さを見る</strong></p>
+                <p>ベクトル検索は言葉を数字の列（ベクトル）に変換し、その距離で「意味が近いか」を判断する。</p>
+            </details>
+        </div>
+
+        <div class="quiz">
+            <h4>Q2. 「猫」と「ネコ」の関係は？</h4>
+            <ul>
+                <li>A) BM25では同じ、ベクトルでは違う</li>
+                <li>B) BM25では違う、ベクトルでは同じ</li>
+                <li>C) どちらでも違う</li>
+            </ul>
+            <details>
+                <summary>答えを見る</summary>
+                <p><strong>正解: B) BM25では違う、ベクトルでは同じ</strong></p>
+                <p>BM25は文字の一致を見るので「猫」と「ネコ」は別物。ベクトル検索は意味を見るので、ほぼ同じとして扱う。</p>
+            </details>
+        </div>
+
+        <div class="quiz">
+            <h4>Q3. 「東京スカイツリー」の検索に強いのは？</h4>
+            <ul>
+                <li>A) BM25</li>
+                <li>B) ベクトル検索</li>
+                <li>C) どちらも同じ</li>
+            </ul>
+            <details>
+                <summary>答えを見る</summary>
+                <p><strong>正解: A) BM25</strong></p>
+                <p>固有名詞（人名、商品名、建物名など）は、正確な言葉の一致を見るBM25の方が得意。</p>
+            </details>
+        </div>
+
+        <div class="summary-box">
+            <h3>🎯 第3部まとめ</h3>
+            <ul>
+                <li>✅ BM25の限界：言葉の一致しか見ない、「猫」と「ネコ」は別物扱い</li>
+                <li>✅ ベクトル検索：言葉を数字の列（座標）で表す、意味が近いものを見つけられる</li>
+                <li>✅ それぞれの得意分野：BM25は固有名詞・正確な検索、ベクトルはあいまいな質問</li>
+                <li>✅ ノイズの問題：意味が近いだけでは不十分なこともある</li>
+            </ul>
+        </div>
+
+        <div class="achievement">
+            <p>✨</p>
+            <h3>【意味の探索者】を獲得！</h3>
+        </div>
+
+        <div class="next-chapter">
+            <p>次回予告</p>
+            <p>「BM25もベクトル検索も、それぞれ得意なことがあるんだね」</p>
+            <p>「では、両方を組み合わせたらどうなると思う？」</p>
+            <p>最終章で、その答えを見せよう！</p>
+            <a href="04_future.html">第4部「未来の検索」へ進む →</a>
+        </div>
+
+        <div class="references">
+            <h3>📚 もっと知りたい人へ</h3>
+            <table>
+                <tr><td>Word2Vec（言葉のベクトル化）</td><td><a href="https://en.wikipedia.org/wiki/Word2vec" target="_blank">Wikipedia: Word2vec</a></td></tr>
+                <tr><td>BERT（最新のAIモデル）</td><td><a href="https://ai.googleblog.com/2018/11/open-sourcing-bert-state-of-art-pre.html" target="_blank">Google AI: BERT</a></td></tr>
+                <tr><td>コサイン類似度</td><td><a href="https://en.wikipedia.org/wiki/Cosine_similarity" target="_blank">Wikipedia: Cosine similarity</a></td></tr>
+                <tr><td>セマンティック検索</td><td><a href="https://www.elastic.co/what-is/semantic-search" target="_blank">Elastic: Semantic Search</a></td></tr>
+            </table>
+            <p style="margin-top: 16px; font-size: 0.9rem; color: var(--text-light);">
+                💡 この学習コンテンツは<a href="https://www.issoh.co.jp/tech/details/4388/">一創の技術記事</a>を基に、中学生向けにアレンジしました。
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <p>検索の魔法 — BM25マスターへの道 | Three Hearts Space | 2025</p>
+    </footer>
+</body>
+</html>
