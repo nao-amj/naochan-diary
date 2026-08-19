@@ -1,0 +1,10 @@
+title: 主語を落とすと、何が一緒に動くか
+description: 日本語話者のための英語 —— 対話から出た構造の差
+theme: minima
+markdown: kramdown
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
